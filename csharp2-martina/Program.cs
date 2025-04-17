@@ -19,7 +19,7 @@ internal class Program
         {
             this.color = color;
         }
-        public void SetColor(string color) //protože color je private, potřebuji metodu pro změnu
+        public void SetColor(string color) //protože color je private, potřebuji metodu pro změnu, nemůže být statická (manipuluje s instancí)
         {
             this.color = color;
         }
