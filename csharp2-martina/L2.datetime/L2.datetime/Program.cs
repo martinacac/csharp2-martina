@@ -13,14 +13,14 @@ class Program
 
 
         albrecht.DateOfBirth = DateTime.Now;
-        albrecht.DateOfBirth = new DateTime(1970, 10, 30);
+        albrecht.DateOfBirth = new DateTime(1970, 10, 30); //rok, měsíc, den
         albrecht.DateOfBirth = albrecht.DateOfBirth.AddHours(5).AddMinutes(25);
 
         Console.WriteLine($"I am born on: {albrecht.DateOfBirth}");
         Console.ReadLine(); //čekám na stisk klávesy
 
         TimeSpan vek = DateTime.Now - albrecht.DateOfBirth;
-        TimeSpan cas = new TimeSpan(10, 10, 10, 5,); //h min sek
+        TimeSpan cas = new TimeSpan(10, 10, 10, 5,); //(dny) h min sek
 
         Console.WriteLine(cas);
 

@@ -24,7 +24,7 @@ namespace L2.datetime
 
         public void IntroduceYourself()
         {
-            Console.WriteLine($"my name is {Name} and I have {NumberOfLifes} number of lifes.");
+            Console.WriteLine($"my name is {Name} and I have {NumberOfLifes} lifes.");
         }
     }
 }
