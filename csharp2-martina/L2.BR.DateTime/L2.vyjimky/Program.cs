@@ -23,7 +23,7 @@ class Program
             Console.ReadLine();
             return;
         }
-        catch (Exception exception) //catch samotný stačí por obecnou výjimku, pokud nepotřebuji exception.Message
+        catch (Exception exception) //catch samotný stačí pro obecnou výjimku, pokud nepotřebuji exception.Message
         {
             Console.WriteLine(exception.Message);
             Console.WriteLine("Wrong user input, program will be terminated.");
