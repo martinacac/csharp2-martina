@@ -50,6 +50,7 @@ class Program
         //Ukol 1 - Obratte poradi stringu
         string palindrom = "Kuna nese nanuk";
         string obracene = ObratText(palindrom);
+        System.Console.WriteLine(obracene);
 
         //char [] charArray = vstup.ToCharArray();
         //return new string(charArray.Reverse().ToArray());
@@ -67,7 +68,7 @@ class Program
 
         //Ukol 3 - opravte v tomto textu omylem zapnuty Caps Lock - např. pomoci char hodnot a int nebo char.IsUpper a char.IsLower('a')
         string capsLock = "jAK mICROSOFT wORD POZNA ZAPNUTY cAPSLOCK";
-        string opraveny = "";
+        string opraveny = ""; //string.Empty
         foreach (char ch in capsLock)
         {
             if (char.IsUpper(ch))
@@ -85,7 +86,13 @@ class Program
         }
         System.Console.WriteLine(opraveny);
 
-
+        //jiná možnost
+        string opraveny2 = string.Empty;
+        for (int i = 0; i < capsLock.Length; i++)
+        {
+            opraveny2 += char.IsUpper(capsLock[i]) ? char.ToLower(capsLock[i]) : char.ToUpper(capsLock[i]);
+        }
+        System.Console.WriteLine(opraveny2);
 
         //Ukol 4 - rozsifrujte tuto zpravu - text byl zasifrovan tak, ze jsme kazde pismeno posunuli o jedno doprava: 'a' -> 'b'. 
         string sifra = "Wzcpsob!qsbdf!.!hsbuvmvkj!b!ktfn!ob!Ufcf!qztoz";
@@ -94,6 +101,16 @@ class Program
         {
             System.Console.Write((char)(ch - 1));
         }
+
+        //nebo
+        //nebo
+        string odsifrovane = string.Empty;
+        for (int i = 0; i < sifra.Length; i++)
+        {
+            odsifrovane += (char)(sifra[i] - 1);
+        }
+        System.Console.WriteLine(odsifrovane);
+
 
         string text = "Hello, my name is Martin and I am happy.";
         System.Console.WriteLine(text.Contains("Martin"));
