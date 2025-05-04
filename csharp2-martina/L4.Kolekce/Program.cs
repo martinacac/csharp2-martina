@@ -12,9 +12,14 @@ class Program
 
         List<Knight> knighstsList = new List<Knight> { martin, zuzka, artus };
 
-        foreach (Knight in knighstsList)
+        for (int i = 0; i < knighstsList.Count; int++)
         {
-            knighstsList[i].WriteNameAndHealth(); //CHYBA
+            knighstsList[i].WriteNameAndHealth();
+        }
+        //nebo
+        foreach (Knight knight in knighstsList)
+        {
+            knight.WriteNameAndHealth();
         }
         Knight jan = new Knight("Jan", 80);
         knighstsList.Add(jan);
@@ -22,7 +27,7 @@ class Program
         int indexOfArtus = knighstsList.IndexOf(artus);
         knighstsList.RemoveAt(indexOfArtus);
         knighstsList.Remove(artus);
-        knighstsList.Insert(1, artus); //vloží za prvního
+        knighstsList.Insert(1, artus); //vloží za prvního- v List to jde, v Array nejde
 
 
         if (knighstsList.Contains(artus))
@@ -43,11 +48,11 @@ class Program
 
         List<Knight> foundKnights = knighstsList.FindAll(k => k.Health == 100);
 
-        //sortovani
+        //sortovani - musím si vytvořit svoji metodu
         //pro stringy:
         string.Compare("string1", "string2");
 
-        knighstsList.Sort(CompareKnights); //nedávám argumenty, bude porovnávat postupně všechny dvojice v List
+        knighstsList.Sort(CompareKnights); //nedávám argumenty, bude porovnávat postupně všechny dvojice v List pomocí mojí metody
 
         foreach (Knight knight in knighstsList)
         {
@@ -56,7 +61,7 @@ class Program
 
     }
 
-    private static int CompareKnights(Knight knight1, Knight knight2)
+    private static int CompareKnights(Knight knight1, Knight knight2) //moje metoda pro sortování
     {
         return string.Compare(knight1.Name, knight2.Name);
     }

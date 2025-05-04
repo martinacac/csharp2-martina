@@ -112,6 +112,16 @@ it was the grayish white of old porridge.";
             pomocnyText = pomocnyText.Substring(pomocnyText.IndexOf(" and ", StringComparison.OrdinalIgnoreCase) + 4);
         }
 
+        // nebo lépe rozdělení textu na jednotlivá slova
+        pocetAnd = 0;
+        foreach (string slovo in text.Split(" "))
+        {
+            if (slovo.Equals("and", StringComparison.OrdinalIgnoreCase))
+            {
+                pocetAnd++;
+            }
+        }
+
         Console.WriteLine("Text obsahuje slovo 'and' celkem 5x' - ".PadRight(padding) + (pocetAnd == 5));
     }
 }

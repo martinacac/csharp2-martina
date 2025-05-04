@@ -149,11 +149,22 @@ class Program
         int y = -5;
         System.Console.WriteLine(x.ToString() + y); //if první je string, druhé se převede na string automaticky
 
-        StringBuilder builder = new StringBuilder();
+        //string palindrom = "Kuna nese nanuk";
+        obracene = string.Empty;
         for (int i = palindrom.Length - 1; i >= 0; i--)
         {
-            //builder - dodělat
+            obracene += palindrom[i];
         }
+        System.Console.WriteLine(obracene);
+        //to stejné se StringBuilder (efektivnější pro větší objem dat)
+        StringBuilder reversedBuilder = new StringBuilder();
+        for (int i = palindrom.Length - 1; i >= 0; i--)
+        {
+            reversedBuilder.Append(palindrom[i]);
+        }
+        System.Console.WriteLine(reversedBuilder.ToString());
+
+
     }
 
     static string ObratText(string vstupniString)
