@@ -6,8 +6,8 @@ public class Event
 {
 
     //Vytvořte třídu Event, která bude uchovávat informace o události (jméno a datum).
-    public string JmenoUdalosti;
-    public DateTime DatumUdalosti;
+    private string JmenoUdalosti;
+    private DateTime DatumUdalosti;
     public Event(string jmenoUdalosti, DateTime datumUdalosti)
     {
         JmenoUdalosti = jmenoUdalosti;
