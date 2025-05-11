@@ -14,7 +14,7 @@ public class Event
         DatumUdalosti = datumUdalosti;
     }
 
-    public static string[] NactiEvent(string eventNameDate)
+    public static string[] SplitStringEvent(string eventNameDate)
     {
         string[] eventCasti = eventNameDate.Split(';');
         if (eventCasti.Count() != 3)
@@ -23,9 +23,9 @@ public class Event
         }
         return eventCasti;
     }
-    public static string NactiEventName(string eventNameDate)
+    public static string GetEventName(string eventNameDate)
     {
-        string eventName = NactiEvent(eventNameDate)[1].Trim();
+        string eventName = SplitStringEvent(eventNameDate)[1].Trim();
 
         if (string.IsNullOrWhiteSpace(eventName))
         {
@@ -34,11 +34,11 @@ public class Event
         return eventName;
 
     }
-    public static DateTime NactiEventDate(string eventNameDate)
+    public static DateTime SplitStringEventDate(string eventNameDate)
     {
         DateTime eventDate = new DateTime(0001, 01, 01);
 
-        string[] eventDateStrings = NactiEvent(eventNameDate)[2].Trim().Split('-');
+        string[] eventDateStrings = SplitStringEvent(eventNameDate)[2].Trim().Split('-');
 
         bool mamRok = int.TryParse(eventDateStrings[0], out int eventDateYear);
         bool mamMesic = int.TryParse(eventDateStrings[1], out int eventDateMonth);

@@ -4,7 +4,7 @@ namespace L4.Ukol.PlanovacUdalosti;
 
 class Program
 {
-    
+
 
     static void Main(string[] args)
     {
@@ -52,7 +52,7 @@ class Program
                         {
                             try
                             {
-                                eventList.Add(new Event(Event.NactiEventName(vstupUzivatele), Event.NactiEventDate(vstupUzivatele)));
+                                eventList.Add(new Event(Event.GetEventName(vstupUzivatele), Event.SplitStringEventDate(vstupUzivatele)));
                                 //Console.WriteLine(eventList[0].DatumUdalosti);
                             }
                             catch (Exception exception)
