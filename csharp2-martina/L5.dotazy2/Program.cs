@@ -85,7 +85,7 @@ public class Program
         // 4. Řešení
         List<string> vzestupne = null;
         //vzestupne = jmena.Sort().ToList; //nefunguje 
-        vzestupne = jmena.OrderBy(j => j.Compare); //taky nefunguje 
+        vzestupne = jmena.OrderBy(j => j).ToList(); //funguje 
 
         foreach (string text in vzestupne)
         {
