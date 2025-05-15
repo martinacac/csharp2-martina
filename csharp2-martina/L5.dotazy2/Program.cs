@@ -84,7 +84,8 @@ public class Program
 
         // 4. Řešení
         List<string> vzestupne = null;
-        //vzestupne = jmena.Sort().ToList; //nefunguje => pouziju orderby
+        //vzestupne = jmena.Sort().ToList; //nefunguje 
+        vzestupne = jmena.OrderBy(j => j.Compare); //taky nefunguje 
 
         foreach (string text in vzestupne)
         {
@@ -132,8 +133,17 @@ public class Program
 
         // 7. Řešení
         List<SkupinaMilionaru> skupinyPodleBanky = null;
+        skupinyPodleBanky = zakaznici.Where(z => z.Zustatek >= 1000000).ToList();
 
-        foreach (var polozka in skupinyPodleBanky)
+        skupinyPodleBanky = from z in zakaznici
+                            where (z.Zustatek >= 1000000)
+                            select new
+                            {
+                                Banka = z.Banka,
+                                Milionari = z.Jmeno
+                            };
+
+        foreach (var polozka in skupinyPodleBanky.GroupBy(b => b.Banka))
         {
             Console.WriteLine(polozka.Banka + ": " + string.Join(" a ", polozka.Milionari));
         }
@@ -152,6 +162,16 @@ public class Program
 
         // 8. Řešení
         List<Zakaznik> reportMilionaru = null;
+
+        reportMilionaru = from z in zakaznici
+                          join b in banky
+                          on z.Banka equals b.Symbol
+                          select new
+                          {
+                              Jmeno = z.Jmeno,
+                              Zustatek = z.Zustatek,
+                              Banka = b.Jmeno
+                          };
 
         foreach (Zakaznik zakaznik in reportMilionaru)
         {
