@@ -18,6 +18,7 @@ class Program
         bool chciUkoncitProgram = false;
         do
         {
+            Console.WriteLine(new string('-', 10));
             Console.WriteLine("Zadej text ADD;[název];[autor];[datum vydání ve formátu YYYY-MM-DD];[počet stran], např. ADD;Animal Farm;George Orwell;1945-08-17;112");
             Console.WriteLine("Nebo zadej text LIST pro výpis knih dle data vydání");
             Console.WriteLine("Nebo zadej text STATS pro výpis statistik");
