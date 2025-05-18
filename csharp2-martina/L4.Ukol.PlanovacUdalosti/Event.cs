@@ -50,7 +50,7 @@ public class Event
         }
 
         eventDate = new DateTime(eventDateYear, eventDateMonth, eventDateDay);
-        //DateTime.TryParseExact(eventDateString, "yyyy-mm-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime eventDate);
+        //DateTime.TryParseExact(eventDateStrings, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime eventDate);
 
         return eventDate;
     }
