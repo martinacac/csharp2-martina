@@ -124,7 +124,7 @@ public class Book
         }
         return bookPagesCount;
     }
-    public void ListBooks(List<Book> nazevKnihovny)
+    public static void ListBooks(List<Book> nazevKnihovny)
     {
         //Vypíše všechny knihy, seřazené podle data vydání. Použijte OrderBy
         System.Console.WriteLine("Vypisuji knihy v knihovně (seřazené podle data vydání):");
@@ -133,7 +133,7 @@ public class Book
             Console.WriteLine($"{book.Title} - {book.Author}, datum vydání {book.PublishedDate:yyyy-MM-dd}, {book.Pages} stran");
         }
     }
-    public void WriteStats(List<Book> nazevKnihovny)
+    public static void WriteStats(List<Book> nazevKnihovny)
     {
         /*Přehled statistik vypíše:
             Průměrný počet stran (použijte Select a Average)
@@ -162,7 +162,7 @@ public class Book
             .Distinct();
         Console.WriteLine($"Počet unikátních slov v názvech: {uniqueWords.Count()}");
     }
-    public void FindInTitle(List<Book> nazevKnihovny)
+    public static void FindInTitle(List<Book> nazevKnihovny)
     {
         //Vyhledá knihy, jejichž název obsahuje zadané slovo, bez ohledu na velikost písmen (použijte Where).
         Console.Write("Zadejte klíčové slovo pro hledání v názvu knihy: ");

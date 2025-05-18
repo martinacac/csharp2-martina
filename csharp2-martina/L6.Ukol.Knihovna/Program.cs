@@ -1,4 +1,9 @@
-﻿namespace L6.Ukol.Knihovna;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Globalization;
+
+namespace L6.Ukol.Knihovna;
 
 class Program
 {
