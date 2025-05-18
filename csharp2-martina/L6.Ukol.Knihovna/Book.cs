@@ -127,24 +127,63 @@ public class Book
     public void ListBooks(List<Book> nazevKnihovny)
     {
         //Vypíše všechny knihy, seřazené podle data vydání. Použijte OrderBy
-        System.Console.WriteLine("Vypisuji knihy v knihovně:");
-        //doplnit
+        System.Console.WriteLine("Vypisuji knihy v knihovně (seřazené podle data vydání):");
+        foreach (Book book in nazevKnihovny.OrderBy(book => book.PublishedDate))
+        {
+            Console.WriteLine($"{book.Title} - {book.Author}, datum vydání {book.PublishedDate:yyyy-MM-dd}, {book.Pages} stran");
+        }
     }
     public void WriteStats(List<Book> nazevKnihovny)
     {
-        /*Vypíše:
+        /*Přehled statistik vypíše:
             Průměrný počet stran (použijte Select a Average)
             Počet knih od každého autora (použijte GroupBy)
             Počet unikatních slov v názvech knih. Použijte SelectMany a rozdělení názvů podle mezer (interpunkci vynechte) pro vytvoření jednoho seznamu všech slov, pak použijte Distinct*/
         System.Console.WriteLine("Vypisuji statistiky:");
-        //doplnit
+        if (!nazevKnihovny.Any())
+        {
+            Console.WriteLine("Knihovna je prázdná.");
+            return;
+        }
+        // Průměrný počet stran
+        double avgPages = nazevKnihovny.Select(book => book.Pages).Average();
+        Console.WriteLine($"Průměrný počet stran: {avgPages:N2}"); //formátovací řetězec N2 „numeric format specifier“ - hodnota avgPages bude převedena na řetězec s dvěma desetinnými místy (jako F2) a navíc s oddělovači tisíců
+                                                                   // Počet knih od každého autora
+        var booksByAuthor = nazevKnihovny.GroupBy(book => book.Author)
+                                .Select(group => new { Author = group.Key, Count = group.Count() });
+        foreach (var group in booksByAuthor)
+        {
+            Console.WriteLine($"Autor {group.Author}: {group.Count} knih");
+        }
+        // Počet unikátních slov v názvech knih
+        var uniqueWords = nazevKnihovny
+            .SelectMany(book => book.Title.Split(new char[] { ' ', ',', '.', '!', '?', ';', ':' }, StringSplitOptions.RemoveEmptyEntries))
+            .Select(word => word.ToLower())
+            .Distinct();
+        Console.WriteLine($"Počet unikátních slov v názvech: {uniqueWords.Count()}");
     }
     public void FindInTitle(List<Book> nazevKnihovny)
     {
-        //Vyhledá knihy, jejichž název obsahuje dané slovo, bez ohledu na velikost písmen (použijte Where).
+        //Vyhledá knihy, jejichž název obsahuje zadané slovo, bez ohledu na velikost písmen (použijte Where).
+        Console.Write("Zadejte klíčové slovo pro hledání v názvu knihy: ");
+        string keyword = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(keyword))
+        {
+            Console.WriteLine("Klíčové slovo nesmí být prázdné.");
+            return;
+        }
         System.Console.WriteLine("Vypisuji knihy obsahující zadané slovo v jejich názvu:");
-        //doplnit
+        var foundBooks = nazevKnihovny.Where(book => book.Title.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0);
+        if (!foundBooks.Any())
+        {
+            Console.WriteLine("Nebyla nalezena žádná kniha s tímto klíčovým slovem.");
+        }
+        else
+        {
+            foreach (var book in foundBooks)
+            {
+                Console.WriteLine($"{book.Title} - {book.Author}, datum vydání {book.PublishedDate:yyyy-MM-dd}, {book.Pages} stran");
+            }
+        }
     }
-
-
 }
