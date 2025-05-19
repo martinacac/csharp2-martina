@@ -107,7 +107,8 @@ public class Book
         bookDate = new DateTime(bookDateYear, bookDateMonth, bookDateDay);*/
 
         string datePart = SplitStringAdd(vstupUzivateleAdd)[3].Trim();
-        if (!DateTime.TryParseExact(datePart, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime bookDate))
+        string[] formats = { "yyyy-MM-dd", "yyyy/MM/dd", "yyyy-M-d", "yyyy/M/d" };
+        if (!DateTime.TryParseExact(datePart, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime bookDate))
         {
             throw new Exception("Nelze zjistit datum vydání.");
         }
@@ -148,7 +149,7 @@ public class Book
         // Průměrný počet stran
         double avgPages = nazevKnihovny.Select(book => book.Pages).Average();
         Console.WriteLine($"Průměrný počet stran: {avgPages:N2}"); //formátovací řetězec N2 „numeric format specifier“ - hodnota avgPages bude převedena na řetězec s dvěma desetinnými místy (jako F2) a navíc s oddělovači tisíců
-                                                                   // Počet knih od každého autora
+        // Počet knih od každého autora
         var booksByAuthor = nazevKnihovny.GroupBy(book => book.Author)
                                 .Select(group => new { Author = group.Key, Count = group.Count() });
         foreach (var group in booksByAuthor)
