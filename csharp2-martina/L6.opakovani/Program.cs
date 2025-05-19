@@ -39,8 +39,20 @@ class Knight
     {
         get
         {
-            return "Some guy";
+            return "Some guy"; //toto už nezměním - nemůžu si uložit jinou hodnotu
         }
+    }
+
+    public bool IsAlive //property, volám pomocí Console.WriteLine(geralt.IsAlive);
+    {
+        get
+        {
+            return this._health > 0;
+        }
+    }
+    public bool IsAliveMethod() //metoda - udělá to stejné, volám pomocí Console.WriteLine(geralt.IsAlive());
+    {
+        return this._health > 0;
     }
 
     // //konstruktor s defaultním nastavením
@@ -117,6 +129,8 @@ class Program
         System.Console.WriteLine(geralt.Health);
         geralt.DefendYourself(artus);
         System.Console.WriteLine(geralt.Health);
+        System.Console.WriteLine(geralt.IsAlive);
+        System.Console.WriteLine(geralt.IsAliveMethod());
         System.Console.WriteLine(Knight.KnightCount);
         //geralt.Health += 5; //if mám private field nebo {private set;}, nemohu to takto měnit
         //geralt.AddHealth(9); //díky mému setteru můžu měnit i u private fieldu

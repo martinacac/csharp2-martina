@@ -133,20 +133,34 @@ public class Program
 
         // 7. Řešení
         List<SkupinaMilionaru> skupinyPodleBanky = null;
-        skupinyPodleBanky = zakaznici.Where(z => z.Zustatek >= 1000000).ToList();
 
-        skupinyPodleBanky = from z in zakaznici
-                            where (z.Zustatek >= 1000000)
-                            select new
-                            {
-                                Banka = z.Banka,
-                                Milionari = z.Jmeno
-                            };
+        skupinyPodleBanky = zakaznici
+                    .Where(z => z.Zustatek >= 1000000)
+                    .GroupBy(z => z.Banka)
+                    .Select(g => new SkupinaMilionaru
+                    {
+                        Banka = g.Key,
+                        Milionari = g.Select(z => z.Jmeno)
+                    })
+                    .ToList();
+        //nebo
+        List<SkupinaMilionaru> skupinyPodleBanky2 = null;
+        skupinyPodleBanky2 =
+                    (from zak in zakaznici
+                     where zak.Zustatek >= 1000000
+                     group zak by zak.Banka into g
+                     select new SkupinaMilionaru
+                     {
+                         Banka = g.Key,
+                         Milionari = from z in g
+                                     select z.Jmeno
+                     }).ToList();
 
-        foreach (var polozka in skupinyPodleBanky.GroupBy(b => b.Banka))
+        foreach (var skupina in skupinyPodleBanky)
         {
-            Console.WriteLine(polozka.Banka + ": " + string.Join(" a ", polozka.Milionari));
+            Console.WriteLine($"{skupina.Banka}: {string.Join(" a ", skupina.Milionari)}");
         }
+
 
         // ==========================================		
         // 8. Vytisknete jmeno kazdeho milionare a jeho banky
@@ -163,15 +177,17 @@ public class Program
         // 8. Řešení
         List<Zakaznik> reportMilionaru = null;
 
-        reportMilionaru = from z in zakaznici
-                          join b in banky
-                          on z.Banka equals b.Symbol
-                          select new
-                          {
-                              Jmeno = z.Jmeno,
-                              Zustatek = z.Zustatek,
-                              Banka = b.Jmeno
-                          };
+        reportMilionaru = (
+                    from zak in zakaznici
+                    join banka in banky on zak.Banka equals banka.Symbol
+                    where zak.Zustatek >= 1000000
+                    select new Zakaznik
+                    {
+                        Jmeno = zak.Jmeno,
+                        Banka = banka.Jmeno,  // Použijeme plný název banky
+                        Zustatek = zak.Zustatek
+                    }
+                    ).ToList();
 
         foreach (Zakaznik zakaznik in reportMilionaru)
         {
