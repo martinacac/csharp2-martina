@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "L6.Opakovani.Obdelnik_get_s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "L6.Ukol.Knihovna", "L6.Ukol.Knihovna\L6.Ukol.Knihovna.csproj", "{60427DC9-CC50-4A63-A6C8-DA73BE5C960A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "L7.dedicnost", "L7.dedicnost\L7.dedicnost.csproj", "{A0284040-3A56-47E7-B9D9-83F20EFF6252}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{60427DC9-CC50-4A63-A6C8-DA73BE5C960A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60427DC9-CC50-4A63-A6C8-DA73BE5C960A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60427DC9-CC50-4A63-A6C8-DA73BE5C960A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0284040-3A56-47E7-B9D9-83F20EFF6252}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0284040-3A56-47E7-B9D9-83F20EFF6252}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0284040-3A56-47E7-B9D9-83F20EFF6252}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0284040-3A56-47E7-B9D9-83F20EFF6252}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
