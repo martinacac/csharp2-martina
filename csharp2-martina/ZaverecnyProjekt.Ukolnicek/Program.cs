@@ -5,7 +5,7 @@ class Program
     static void Main(string[] args)
     {
         Uzivatel prihlasenyUzivatel = new Uzivatel();
-        string cestaUzivatele = "uzivatele.txt";
+        string souborUzivatele = "uzivatele.txt";
         while (true)
         {
             if (prihlasenyUzivatel == null)
