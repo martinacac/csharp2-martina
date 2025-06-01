@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace L8.Interfacy.BR2;
 
-public class Kruh : IUmiPocitatObsah, IUmiPocitatObvod
+public class Kruh : ITvary//IUmiPocitatObsah, IUmiPocitatObvod
 {
     public int Polomer { get; set; }
     public Kruh(int polomer)

@@ -3,7 +3,7 @@ using System;
 namespace L8.AbstraktniTridy.Princezna;
 
 //public class Vila : DancingHuman, MagicHuman //nelze dědit ze 2 tříd
-public class Vila : DancingHuman, IMagicHuman  //IHuman, IDancingHuman, IMagicHuman
+public class Vila : DancingHuman, IMagicHuman  //: IHuman, IDancingHuman, IMagicHuman 
 {
     public override void PredstavSe()
     {

@@ -12,19 +12,19 @@ internal class Program
         Kruh kruh = new Kruh(5);
         Obdelnik obdelnik = new Obdelnik(4, 6);
 
-        List<object> tvary = new List<object> { kruh, obdelnik };
         System.Console.WriteLine("---List<object>---");
+        List<object> tvary = new List<object> { kruh, obdelnik };
 
         foreach (var tvar in tvary)
         {
             if (tvar is IUmiPocitatObsah obsah)
             {
-                Console.WriteLine($"Obsah: {obsah.VypocitejObsah()}");
+                Console.WriteLine($"Obsah: {obsah.VypocitejObsah()}"); //bez IF s přetypováním objektu: Console.WriteLine($"Obsah: {((IUmiPocitatObsah)tvar).VypocitejObsah()}");
             }
 
             if (tvar is IUmiPocitatObvod obvod)
             {
-                Console.WriteLine($"Obvod: {obvod.VypocitejObvod()}");
+                Console.WriteLine($"Obvod: {obvod.VypocitejObvod()}"); //bez IF: Console.WriteLine($"Obvod: {((IUmiPocitatObvod)tvar).VypocitejObvod()}");
             }
         }
         System.Console.WriteLine("---List<IUmiPocitatObsah>---");
@@ -43,6 +43,13 @@ internal class Program
             {
                 Console.WriteLine($"Obvod: {obvod.VypocitejObvod()}");
             }
+        }
+        System.Console.WriteLine("---List<ITvary>---"); //nejlepší řešení je vytvořit si rodičovský interface
+        List<ITvary> tvary3 = new List<ITvary> { kruh, obdelnik };
+        foreach (ITvary tvar in tvary3)
+        {
+            System.Console.WriteLine($"{tvar.GetType()} obsah: {tvar.VypocitejObsah()}");
+            System.Console.WriteLine($"{tvar.GetType().Name} obvod: {tvar.VypocitejObvod():F2}");  //Name if chci jen název třídy bez názvu projetku
         }
     }
 }

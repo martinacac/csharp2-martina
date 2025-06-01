@@ -5,6 +5,10 @@ namespace L8.AbstraktniTridy.Princezna;
 public class Princess : DancingHuman
 {
 
+    public override void PredstavSe()
+    {
+        System.Console.WriteLine("Jsem princezna.");
+    }
     public override void StartDancing()
     {
         System.Console.WriteLine("I am a dancing prince.");
