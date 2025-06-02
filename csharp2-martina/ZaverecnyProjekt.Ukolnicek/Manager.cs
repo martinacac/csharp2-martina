@@ -2,13 +2,11 @@ using System;
 
 namespace ZaverecnyProjekt.Ukolnicek;
 
-public class Uzivatel
+public class Manager : GeneralUser
 {
     public string Jmeno { get; private set; }
     public string Heslo { get; private set; }
-    public Uzivatel(string jmeno = "Null", string heslo = "Null")
+    public Manager(string name, string password) : base(name, password)
     {
-        Jmeno = jmeno;
-        Heslo = heslo;
     }
 }
