@@ -11,4 +11,16 @@ public abstract class GeneralUser
         Name = name;
         Password = password;
     }
+    public void ListTasks()
+    {
+
+    }
+    public void FindTasks()
+    {
+
+    }
+    public void LogOut()
+    {
+
+    }
 }

@@ -4,29 +4,36 @@ class Program
 {
     static void Main(string[] args)
     {
-        Uzivatel prihlasenyUzivatel = new Uzivatel();
+        GeneralUser loggedUser = new User();
+        GeneralUser loggedManager = new Manager();
         string souborUzivatele = "uzivatele.txt";
-        while (true)
+        do
         {
-            if (prihlasenyUzivatel == null)
+            if (loggedUser == null && loggedManager == null)
             {
                 Console.Clear();
                 Console.WriteLine("----------------------");
-                Console.WriteLine("Správce úkolů - hlavní menu");
+                Console.WriteLine("TASK TRACKER - Main Menu");
                 Console.WriteLine("----------------------");
-                Console.WriteLine("1) Registrace");
-                Console.WriteLine("2) Přihlášení");
-                Console.WriteLine("0) Konec");
-                Console.Write("Zadejte volbu: ");
-                string volba = Console.ReadLine();
+                Console.WriteLine("1) Log in as User");
+                Console.WriteLine("2) Log in as Manager");
+                Console.WriteLine("3) Sign up as new User");
+                Console.WriteLine("0) End program");
+                Console.Write("Your choice (0-3): ");
+                string choice = Console.ReadLine();
 
-                //switch (volba)
+                //switch (choice)
             }
-            else
+            else if (loggedUser != null)
             {
-                Utils.MenuUzivatele();
-            }
+                (loggedUser as User).UserMenu();
 
-        }
+            }
+            else if (loggedManager != null)
+            {
+                (loggedManager as Manager).ManagerMenu();
+
+            }
+        } while (loggedUser == null && loggedManager == null);
     }
 }

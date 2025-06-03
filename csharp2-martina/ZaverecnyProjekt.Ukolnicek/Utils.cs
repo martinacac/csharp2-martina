@@ -4,7 +4,8 @@ namespace ZaverecnyProjekt.Ukolnicek;
 
 public class Utils
 {
-    public static void MenuUzivatele()
+    //for public static methods
+    /*public static void MenuUzivatele()
     {
         while (true)
         {
@@ -53,12 +54,12 @@ public class Utils
     {
 
     }
-    public static void UlozitUkolyUzivatele(string jmeno, List<Ukol> ukoly)
+    public static void UlozitUkolyUzivatele(string jmeno, List<Task> ukoly)
     {
 
     }
-    public static List<Ukol> NacistUkolyUzivatele(string jmeno)
+    public static List<Task> NacistUkolyUzivatele(string jmeno)
     {
 
-    }
+    }*/
 }

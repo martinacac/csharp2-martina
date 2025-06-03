@@ -21,12 +21,12 @@ string Name, string Password
 
 base(string name), base(string password)
 
-1. MarkTaskAsCompleted
+1. SignUpAsNewUser
+2. MarkTaskAsCompleted
 
 ### public class Manager : GeneralUser
 
 base(name), base(password)
 
-1. SignUpNewUser
-2. AddTask
-3. DeleteTask
+1. AddTask
+2. DeleteTask
