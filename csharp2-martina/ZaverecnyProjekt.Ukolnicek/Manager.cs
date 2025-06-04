@@ -4,7 +4,7 @@ namespace ZaverecnyProjekt.Ukolnicek;
 
 public class Manager : GeneralUser
 {
-    public string Name { get; private set; }
+    public string Name { get; set; }
     public string Password { get; private set; }
     public Manager(string name = "Null", string password = "Null") : base(name, password)
     {

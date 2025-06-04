@@ -4,7 +4,7 @@ namespace ZaverecnyProjekt.Ukolnicek;
 
 public abstract class GeneralUser
 {
-    public string Name { get; private set; }
+    public string Name { get; set; }
     public string Password { get; private set; }
     public GeneralUser(string name = "Null", string password = "Null")
     {

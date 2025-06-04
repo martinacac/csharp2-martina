@@ -4,9 +4,9 @@ namespace ZaverecnyProjekt.Ukolnicek;
 
 public class User : GeneralUser
 {
-    public string Name { get; private set; }
+    public string Name { get; set; }
     public string Password { get; private set; }
-    public List<Task> Tasks { get; private set; }
+    public List<Task> Tasks { get; set; }
     public User(string name = "Null", string password = "Null") : base(name, password)
     {
     }
