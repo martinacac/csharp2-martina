@@ -1,12 +1,11 @@
 using System;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace ZaverecnyProjekt.Ukolnicek;
 
 public class User : GeneralUser
 {
-    public string Name { get; set; }
-    public string Password { get; private set; }
     public List<Task> Tasks { get; set; }
     public User(string name = "Null", string password = "Null") : base(name, password)
     {
@@ -34,13 +33,13 @@ public class User : GeneralUser
                 case "1":
                     {
                         IsValidInput = true;
-                        ListTasks(); //inherited from GeneralUser
+                        ListTasks();
                         break;
                     }
                 case "2":
                     {
                         IsValidInput = true;
-                        FindTasks(); //inherited from GeneralUser
+                        FindTasks();
                         break;
                     }
                 case "3":
@@ -73,7 +72,7 @@ public class User : GeneralUser
         {
             Console.Write("Input number of task to be marked as completed: ");
             validIndex = int.TryParse(Console.ReadLine(), out index);
-            if (!validIndex) Console.WriteLine("Try again.");
+            if (!validIndex) Console.WriteLine("Invalid number. Try again.");
             else index--;
         } while (!validIndex);
 
@@ -86,7 +85,7 @@ public class User : GeneralUser
         }
         else
         {
-            Console.WriteLine("Invalid index.");
+            Console.WriteLine("Invalid number.");
         }
         Console.ReadKey();
     }
@@ -127,18 +126,37 @@ public class User : GeneralUser
 
         string pathToXmlFileInDirectory = Path.Combine(Utils.pathToDirectory, userXmlFile);
 
-        if (!File.Exists(pathToXmlFileInDirectory))
+        try
         {
-            throw new Exception("Tasks not found.");
-            //return tasks;
-        }
+            if (!File.Exists(pathToXmlFileInDirectory))
+            {
+                System.Console.WriteLine("Tasks not found.");
+                Console.ReadKey();
+                return null;
+            }
 
-        XmlSerializer taskSerializer = new XmlSerializer(typeof(List<Task>));
-        using (StreamReader reader = new StreamReader(pathToXmlFileInDirectory))
+            XmlSerializer taskSerializer = new XmlSerializer(typeof(List<Task>));
+            using (StreamReader reader = new StreamReader(pathToXmlFileInDirectory))
+            {
+                tasks1 = taskSerializer.Deserialize(reader) as List<Task>;
+            }
+        }
+        catch (InvalidOperationException ex)
         {
-            tasks1 = taskSerializer.Deserialize(reader) as List<Task>;
+            System.Console.WriteLine("Chyba ve fromátu XML: " + ex.Message);
         }
-
+        catch (XmlException ex)
+        {
+            System.Console.WriteLine("Chyba při parsování XML: " + ex.Message);
+        }
+        catch (IOException ex)
+        {
+            System.Console.WriteLine("Chyba při čtení souboru: " + ex.Message);
+        }
+        catch (Exception ex)
+        {
+            System.Console.WriteLine("Neočekávaná chyba: " + ex.Message);
+        }
         return tasks1;
     }
 

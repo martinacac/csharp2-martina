@@ -37,6 +37,21 @@ class Program
                             loggedManager = Utils.LogInManager();
                             break;
                         }
+                    case "3":
+                        {
+                            System.Console.WriteLine("To zatím neumím.");
+                            break;
+                        }
+                    case "0":
+                        {
+                            System.Console.WriteLine("Ukončuji program.");
+                            return;
+                        }
+                    default:
+                        {
+                            System.Console.WriteLine("Invalid input. Try again.");
+                            break;
+                        }
                 }
             }
             else if (loggedUser != null)
@@ -47,8 +62,7 @@ class Program
             else if (loggedManager != null)
             {
                 (loggedManager as Manager).ManagerMenu();
-
             }
-        } while (loggedUser == null && loggedManager == null);
+        } while (true);
     }
 }

@@ -73,7 +73,7 @@ public class Utils
             return null;
         }
 
-        foreach (var row in File.ReadAllLines(allManagersFile))
+        foreach (var row in File.ReadAllLines(allManagersPathAndFile))
         {
             var data = row.Split(';');
             if (data[0] == name && data[1] == codedPassword)

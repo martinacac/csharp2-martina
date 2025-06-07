@@ -4,39 +4,62 @@ namespace ZaverecnyProjekt.Ukolnicek;
 
 public class Manager : GeneralUser
 {
-    public string Name { get; set; }
-    public string Password { get; private set; }
     public Manager(string name = "Null", string password = "Null") : base(name, password)
     {
     }
     public void ListUsers()
     {
-        foreach (var row in File.ReadAllLines(Utils.allUsersPathAndFile))
+        if (!File.Exists(Utils.allUsersPathAndFile) || !Directory.Exists(Utils.pathToDirectory))
+        {
+            Console.WriteLine("No registered users found.");
+            Console.ReadKey();
+        }
+        else
         {
             int index = 1;
-            var user = row.Split(';');
-            System.Console.WriteLine($"User number: {index++} - {user[0]}");
+            foreach (var row in File.ReadAllLines(Utils.allUsersPathAndFile))
+            {
+                var user = row.Split(';');
+                System.Console.WriteLine($"User number: {index++} - {user[0]}");
+            }
         }
     }
     public User? GetSelectedUser()
     {
-        bool validIndex = false;
-        int index;
-        do
+        if (!File.Exists(Utils.allUsersPathAndFile) || !Directory.Exists(Utils.pathToDirectory))
         {
-            Console.Write("Input number of user to be selected: ");
-            validIndex = int.TryParse(Console.ReadLine(), out index);
-            if (!validIndex) Console.WriteLine("Try again.");
-            else index--;
-        } while (!validIndex);
+            Console.WriteLine("No registered users found.");
+            Console.ReadKey();
+            return null;
+        }
+        else
+        {
+            bool validIndex = false;
+            int index;
+            do
+            {
+                Console.Write("Input number of user to be selected: ");
+                validIndex = int.TryParse(Console.ReadLine(), out index);
+                if (!validIndex) Console.WriteLine("Invalid index. Try again.");
+                else if (index < 0 || index > File.ReadAllLines(Utils.allUsersPathAndFile).Length)
+                {
+                    validIndex = false;
+                    Console.WriteLine("Invalid index. Try again.");
+                }
+                else index--;
+            } while (!validIndex);
 
-        string userLine = File.ReadAllLines(Utils.allUsersPathAndFile)[index];
-        User selectedUser = new User
-        {
-            Name = userLine.Split(';')[0]
-        };
-        selectedUser.Tasks = selectedUser.GetTasksOfUser();
-        return selectedUser;
+
+            Console.ReadKey();
+
+            string userLine = File.ReadAllLines(Utils.allUsersPathAndFile)[index];
+            User selectedUser = new User
+            {
+                Name = userLine.Split(';')[0]
+            };
+            selectedUser.Tasks = selectedUser.GetTasksOfUser();
+            return selectedUser;
+        }
     }
     public void ManagerMenu()
     {
@@ -64,7 +87,7 @@ public class Manager : GeneralUser
                         {
                             selectedUser.ListTasks();
                             IsValidInput = true;
-                            List<Task> selectedUserTasks = selectedUser.GetTasksOfUser();
+                            //List<Task> selectedUserTasks = selectedUser.GetTasksOfUser();
                         }
                         else System.Console.WriteLine("User not found.");
                         break;
