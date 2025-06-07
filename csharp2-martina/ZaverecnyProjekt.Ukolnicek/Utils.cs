@@ -5,7 +5,14 @@ namespace ZaverecnyProjekt.Ukolnicek;
 
 public class Utils
 {
-    //for public static methods
+    //for public static methods and var
+    public static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+    public static string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
+    public static string allUsersFile = "users.txt";
+    public static string allManagersFile = "managers.txt";
+    public static string allUsersPathAndFile = Path.Combine(pathToDirectory, allUsersFile);
+    public static string allManagersPathAndFile = Path.Combine(pathToDirectory, allManagersFile);
+
     static string EncodePassword(string password)
     {
         return Convert.ToBase64String(Encoding.UTF8.GetBytes(password));
@@ -17,7 +24,6 @@ public class Utils
     }
     public static User? LogInUser()
     {
-        string allUsers = "users.txt";
 
         Console.Write("Input user name: ");
         string name = Console.ReadLine();
@@ -25,14 +31,14 @@ public class Utils
         string password = Console.ReadLine();
         string codedPassword = EncodePassword(password);
 
-        if (!File.Exists(allUsers))
+        if (!File.Exists(allUsersPathAndFile) || !Directory.Exists(pathToDirectory))
         {
             Console.WriteLine("No registered users found.");
             Console.ReadKey();
             return null;
         }
 
-        foreach (var row in File.ReadAllLines(allUsers))
+        foreach (var row in File.ReadAllLines(allUsersPathAndFile))
         {
             var data = row.Split(';');
             if (data[0] == name && data[1] == codedPassword)
@@ -53,7 +59,6 @@ public class Utils
     }
     public static Manager? LogInManager()
     {
-        string allManagers = "managers.txt";
 
         Console.Write("Input manager name: ");
         string name = Console.ReadLine();
@@ -61,14 +66,14 @@ public class Utils
         string password = Console.ReadLine();
         string codedPassword = EncodePassword(password);
 
-        if (!File.Exists(allManagers))
+        if (!File.Exists(allManagersPathAndFile) || !Directory.Exists(pathToDirectory))
         {
             Console.WriteLine("No registered managers found.");
             Console.ReadKey();
             return null;
         }
 
-        foreach (var row in File.ReadAllLines(allManagers))
+        foreach (var row in File.ReadAllLines(allManagersFile))
         {
             var data = row.Split(';');
             if (data[0] == name && data[1] == codedPassword)

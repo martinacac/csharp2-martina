@@ -1,4 +1,5 @@
 using System;
+using System.Xml.Serialization;
 
 namespace ZaverecnyProjekt.Ukolnicek;
 
@@ -66,8 +67,16 @@ public class User : GeneralUser
     public void MarkTaskAsCompleted()
     {
         ListTasks();
-        Console.Write("Input number of task to be marked as completed: ");
-        int index = int.Parse(Console.ReadLine()) - 1;
+        bool validIndex = false;
+        int index;
+        do
+        {
+            Console.Write("Input number of task to be marked as completed: ");
+            validIndex = int.TryParse(Console.ReadLine(), out index);
+            if (!validIndex) Console.WriteLine("Try again.");
+            else index--;
+        } while (!validIndex);
+
 
         if (index >= 0 && index < Tasks.Count)
         {
@@ -84,38 +93,91 @@ public class User : GeneralUser
 
     public void SaveTasks(List<Task> tasks)
     {
-        var rows = new List<string>();
+        XmlSerializer taskSerializer = new XmlSerializer(typeof(List<Task>));
+        //string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        //string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
+        if (!Directory.Exists(Utils.pathToDirectory))
+        {
+            Directory.CreateDirectory(Utils.pathToDirectory);
+        }
+        string userXmlFile = $"{Name}.xml";
+        string pathToXmlFileInDirectory = Path.Combine(Utils.pathToDirectory, userXmlFile);
+        using (StreamWriter writer = new StreamWriter(pathToXmlFileInDirectory))
+        {
+            taskSerializer.Serialize(writer, tasks);
+        }
+        /*var rows = new List<string>();
         foreach (var t in tasks)
         {
             rows.Add($"{t.Description};{t.HighPriority};{t.DueDate.ToString("dd.MM.yyyy")};{t.Completed}");
         }
-        File.WriteAllLines($"{Name}.txt", rows);
+        File.WriteAllLines($"{Name}.txt", rows);*/
     }
 
     public List<Task> GetTasksOfUser()
     {
-        var tasks = new List<Task>();
-        string path = $"{Name}.txt";
+        List<Task> tasks1 = new List<Task>();
+        //string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        //string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
+        if (!Directory.Exists(Utils.pathToDirectory))
+        {
+            Directory.CreateDirectory(Utils.pathToDirectory);
+        }
+        string userXmlFile = $"{Name}.xml";
 
-        if (!File.Exists(path))
+        string pathToXmlFileInDirectory = Path.Combine(Utils.pathToDirectory, userXmlFile);
+
+        if (!File.Exists(pathToXmlFileInDirectory))
         {
             throw new Exception("Tasks not found.");
             //return tasks;
         }
 
-        foreach (var row in File.ReadAllLines(path))
+        XmlSerializer taskSerializer = new XmlSerializer(typeof(List<Task>));
+        using (StreamReader reader = new StreamReader(pathToXmlFileInDirectory))
         {
-            var data = row.Split(';');
-            tasks.Add(new Task
-            {
-                Description = data[0],
-                HighPriority = bool.Parse(data[1]),
-                DueDate = DateTime.Parse(data[2]),
-                Completed = bool.Parse(data[3])
-            });
+            tasks1 = taskSerializer.Deserialize(reader) as List<Task>;
         }
 
-        return tasks;
+        return tasks1;
+    }
+
+    /*List<Task> tasks = new List<Task>();
+    string userFile = $"{Name}.txt";
+    string pathToFileInDirectory = Path.Combine(pathToDirectory, userFile);
+    if (!File.Exists(pathToFileInDirectory))
+    {
+        throw new Exception("Tasks not found.");
+        //return tasks;
+    }
+    foreach (var row in File.ReadAllLines(pathToFileInDirectory))
+    {
+        var data = row.Split(';');
+        tasks.Add(new Task
+        {
+            Description = data[0],
+            HighPriority = bool.Parse(data[1]),
+            DueDate = DateTime.Parse(data[2]),
+            Completed = bool.Parse(data[3])
+        });
+    }
+    return tasks;
+    }*/
+    public void ListTasks()
+    {
+        System.Console.WriteLine($"User: {Name} - List of tasks: ");
+        foreach (Task t in Tasks)
+        {
+            int index = 1;
+            System.Console.WriteLine($"Task number: {index++} - {t.Description}; High priority: {t.HighPriority}; Due date: {t.DueDate.ToString("dd.MM.yyyy")}; Completed: {t.Completed}");
+        }
+    }
+
+    public void FindTasks()
+    {
+        System.Console.WriteLine("Toto se ještě musí dodělat.");
     }
 
 }
+
+

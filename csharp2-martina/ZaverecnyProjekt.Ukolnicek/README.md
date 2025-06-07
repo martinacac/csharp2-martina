@@ -14,8 +14,6 @@ string Name, string Password
 1. LogIn
 2. LogOut
 3. EndProgram
-4. ListTasks
-5. FindTasks
 
 ### public class User : GeneralUser
 
@@ -23,6 +21,8 @@ base(string name), base(string password)
 
 1. SignUpAsNewUser
 2. MarkTaskAsCompleted
+3. ListTasks
+4. FindTasks
 
 ### public class Manager : GeneralUser
 
