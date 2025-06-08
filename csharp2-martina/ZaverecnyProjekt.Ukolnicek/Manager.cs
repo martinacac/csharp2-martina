@@ -7,6 +7,7 @@ public class Manager : GeneralUser
     public Manager(string name = "Null", string password = "Null") : base(name, password)
     {
     }
+    public Manager() { }
     public void ListUsers()
     {
         if (!File.Exists(Utils.allUsersPathAndFile) || !Directory.Exists(Utils.pathToDirectory))

@@ -7,6 +7,7 @@ namespace ZaverecnyProjekt.Ukolnicek;
 public class User : GeneralUser
 {
     public List<Task> Tasks { get; set; }
+    public User() { }
     public User(string name = "Null", string password = "Null") : base(name, password)
     {
     }
@@ -184,9 +185,9 @@ public class User : GeneralUser
     public void ListTasks()
     {
         System.Console.WriteLine($"User: {Name} - List of tasks: ");
+        int index = 1;
         foreach (Task t in Tasks)
         {
-            int index = 1;
             System.Console.WriteLine($"Task number: {index++} - {t.Description}; High priority: {t.HighPriority}; Due date: {t.DueDate.ToString("dd.MM.yyyy")}; Completed: {t.Completed}");
         }
     }
