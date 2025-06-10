@@ -73,6 +73,7 @@ public class Manager : GeneralUser
             Console.WriteLine("2) Find Tasks");
             Console.WriteLine("3) Add Task");
             Console.WriteLine("4) Delete Task");
+            Console.WriteLine("5) Sign up new Manager");
             Console.WriteLine("0) Log out");
             Console.Write("Your choice (0-4): ");
             string choice = Console.ReadLine();
@@ -117,6 +118,12 @@ public class Manager : GeneralUser
                         DeleteTask();
                         break;
                     }
+                case "5":
+                    {
+                        IsValidInput = true;
+                        Utils.SignUpManager();
+                        break;
+                    }
                 case "0":
                     {
                         IsValidInput = true;
@@ -140,4 +147,6 @@ public class Manager : GeneralUser
     {
         System.Console.WriteLine("Toto se ještě musí dodělat.");
     }
+
+
 }

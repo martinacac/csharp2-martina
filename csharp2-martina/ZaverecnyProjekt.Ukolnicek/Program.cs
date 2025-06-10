@@ -4,11 +4,12 @@ namespace ZaverecnyProjekt.Ukolnicek;
 
 class Program
 {
-    //public string souborUzivatele = "uzivatele.txt";
     static void Main(string[] args)
     {
-        GeneralUser loggedUser = new User();
-        GeneralUser loggedManager = new Manager();
+        User loggedUser = new User();
+        Manager loggedManager = new Manager();
+        if (!Utils.ExistsDirectory()) Directory.CreateDirectory(Utils.pathToDirectory);
+        if (!Utils.ExistsAllUsersFile()) File.Create(Utils.allUsersPathAndFile).Close();
 
         do
         {
@@ -40,6 +41,7 @@ class Program
                     case "3":
                         {
                             System.Console.WriteLine("To zatím neumím.");
+                            Utils.SignUpUser();
                             break;
                         }
                     case "0":
@@ -56,12 +58,12 @@ class Program
             }
             else if (loggedUser != null)
             {
-                (loggedUser as User).UserMenu();
+                loggedUser.UserMenu();
 
             }
             else if (loggedManager != null)
             {
-                (loggedManager as Manager).ManagerMenu();
+                loggedManager.ManagerMenu();
             }
         } while (true);
     }

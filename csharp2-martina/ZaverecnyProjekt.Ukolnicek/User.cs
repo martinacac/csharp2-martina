@@ -93,25 +93,29 @@ public class User : GeneralUser
 
     public void SaveTasks(List<Task> tasks)
     {
-        XmlSerializer taskSerializer = new XmlSerializer(typeof(List<Task>));
-        //string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        //string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
-        if (!Directory.Exists(Utils.pathToDirectory))
+        if (tasks != null)
         {
-            Directory.CreateDirectory(Utils.pathToDirectory);
+            XmlSerializer taskSerializer = new XmlSerializer(typeof(List<Task>));
+            //string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            //string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
+            if (!Directory.Exists(Utils.pathToDirectory))
+            {
+                Directory.CreateDirectory(Utils.pathToDirectory);
+            }
+            string userXmlFile = $"{Name}.xml";
+            string pathToXmlFileInDirectory = Path.Combine(Utils.pathToDirectory, userXmlFile);
+            using (StreamWriter writer = new StreamWriter(pathToXmlFileInDirectory))
+            {
+                taskSerializer.Serialize(writer, tasks);
+            }
         }
-        string userXmlFile = $"{Name}.xml";
-        string pathToXmlFileInDirectory = Path.Combine(Utils.pathToDirectory, userXmlFile);
-        using (StreamWriter writer = new StreamWriter(pathToXmlFileInDirectory))
-        {
-            taskSerializer.Serialize(writer, tasks);
-        }
+        else System.Console.WriteLine("No tasks to be saved.");
         /*var rows = new List<string>();
-        foreach (var t in tasks)
-        {
-            rows.Add($"{t.Description};{t.HighPriority};{t.DueDate.ToString("dd.MM.yyyy")};{t.Completed}");
-        }
-        File.WriteAllLines($"{Name}.txt", rows);*/
+            foreach (var t in tasks)
+            {
+                rows.Add($"{t.Description};{t.HighPriority};{t.DueDate.ToString("dd.MM.yyyy")};{t.Completed}");
+            }
+            File.WriteAllLines($"{Name}.txt", rows);*/
     }
 
     public List<Task> GetTasksOfUser()

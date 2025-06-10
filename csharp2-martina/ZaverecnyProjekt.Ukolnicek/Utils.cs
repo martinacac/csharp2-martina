@@ -10,8 +10,12 @@ public class Utils
     public static string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
     public static string allUsersFile = "users.txt";
     public static string allManagersFile = "managers.txt";
+    static string defaultManagerName = "firstmanager";
+    static string defaultManagerPassword = "bigboss";
+
     public static string allUsersPathAndFile = Path.Combine(pathToDirectory, allUsersFile);
     public static string allManagersPathAndFile = Path.Combine(pathToDirectory, allManagersFile);
+    public static char[] invalidFileNameChar = { '\\', '|', '/', ':', '<', '>', '*', '?', '"' };
 
     public static string EncodePassword(string password)
     {
@@ -98,5 +102,198 @@ public class Utils
         Console.WriteLine("Invalid credentials.");
         Console.ReadKey();
         return null;
+    }
+    public static void SignUpUser()
+    {
+        int minLength = 3;
+        bool repeatInput;
+        string name;
+        string password;
+        string codedPassword;
+        do
+        {
+            repeatInput = false;
+            Console.Write("Input new user name: ");
+            name = Console.ReadLine();
+            if (!hasRequiredMinLength(name, minLength))
+            {
+                System.Console.WriteLine($"User name must have at least {minLength} characters. Try again.");
+                repeatInput = true;
+            }
+            if (ExistsUserName(name) || ExistsUserNameFile(name))
+            {
+                System.Console.WriteLine($"User name already exists. Try again.");
+                repeatInput = true;
+            }
+            foreach (char i in name)
+                foreach (char j in invalidFileNameChar)
+                {
+                    if (i == j)
+                    {
+                        repeatInput = true;
+                        System.Console.Write($"User name must not contain characters: ");
+                        foreach (char item in invalidFileNameChar)
+                        {
+                            Console.Write($"{item} ");
+                        }
+                        System.Console.WriteLine();
+                    }
+                }
+        } while (repeatInput);
+        do
+        {
+            repeatInput = false;
+            Console.Write($"Input password (min {minLength} characters): ");
+            password = Console.ReadLine();
+            if (!hasRequiredMinLength(password, minLength))
+            {
+                System.Console.WriteLine($"Password must have at least {minLength} characters. Try again.");
+                repeatInput = true;
+                continue;
+            }
+            Console.Write($"Input password for verification): ");
+            string password2 = Console.ReadLine();
+            if (password != password2)
+            {
+                repeatInput = true;
+                System.Console.WriteLine("Password does not match. Try again.");
+            }
+        } while (repeatInput);
+        codedPassword = EncodePassword(password);
+
+        string userAndCodedPassword = $"{name};{codedPassword}\n";
+        string userFile = $"{name}.xml";
+        string userPathAndFile = Path.Combine(pathToDirectory, userFile);
+        if (!ExistsUserNameFile(name))
+        {
+            File.AppendAllText(allUsersPathAndFile, userAndCodedPassword);
+            File.Create(userPathAndFile).Close();
+            Console.WriteLine($"Sign up of user {name} successfully completed.");
+        }
+        else
+        {
+            System.Console.WriteLine($"Warning: Sign up of user {name} failed.");
+        }
+    }
+    public static void SignUpManager()
+    {
+        int minLength = 3;
+        bool repeatInput;
+        string name;
+        string password;
+        string codedPassword;
+        do
+        {
+            repeatInput = false;
+            Console.Write("Input new manager name: ");
+            name = Console.ReadLine();
+            if (!hasRequiredMinLength(name, minLength))
+            {
+                System.Console.WriteLine($"User name must have at least {minLength} characters. Try again.");
+                repeatInput = true;
+            }
+            if (Utils.ExistsManagerName(name))
+            {
+                System.Console.WriteLine($"Manager name already exists. Try again.");
+                repeatInput = true;
+            }
+            foreach (char i in name)
+                foreach (char j in invalidFileNameChar)
+                {
+                    if (i == j)
+                    {
+                        repeatInput = true;
+                        System.Console.Write($"Manager name must not contain characters: ");
+                        foreach (char item in invalidFileNameChar)
+                        {
+                            Console.Write($"{item} ");
+                        }
+                        System.Console.WriteLine();
+                    }
+                }
+        } while (repeatInput);
+        do
+        {
+            repeatInput = false;
+            Console.Write($"Input password (min {minLength} characters): ");
+            password = Console.ReadLine();
+            if (!hasRequiredMinLength(password, minLength))
+            {
+                System.Console.WriteLine($"Password must have at least {minLength} characters. Try again.");
+                repeatInput = true;
+                continue;
+            }
+            Console.Write($"Input password for verification): ");
+            string password2 = Console.ReadLine();
+            if (password != password2)
+            {
+                repeatInput = true;
+                System.Console.WriteLine("Password does not match. Try again.");
+            }
+        } while (repeatInput);
+        codedPassword = EncodePassword(password);
+
+        string managerAndCodedPassword = $"{name};{codedPassword}\n";
+
+        if (ExistsAllManagersFile() && File.ReadAllLines(allManagersPathAndFile)[0].Split(';')[0] == defaultManagerName)
+        {
+            File.WriteAllText(allManagersPathAndFile, managerAndCodedPassword);
+        }
+        else if (ExistsAllManagersFile() && File.ReadAllLines(allManagersPathAndFile)[0].Split(';')[0] != defaultManagerName)
+        {
+            File.AppendAllText(allManagersPathAndFile, managerAndCodedPassword);
+            Console.WriteLine($"Sign up of manager {name} successfully completed.");
+        }
+        else
+        {
+            System.Console.WriteLine($"Warning: Sign up of manager {name} failed.");
+        }
+    }
+    public static bool hasRequiredMinLength(string text, int minLength)
+    {
+        if (text.Length >= minLength) return true;
+        else return false;
+    }
+    public static bool ExistsDirectory()
+    {
+        if (Directory.Exists(pathToDirectory)) return true;
+        return false;
+    }
+    public static bool ExistsAllUsersFile()
+    {
+        if (File.Exists(allUsersPathAndFile)) return true;
+        return false;
+    }
+    public static bool ExistsAllManagersFile()
+    {
+        if (File.Exists(allManagersPathAndFile)) return true;
+        return false;
+    }
+    public static bool ExistsUserNameFile(string userName)
+    {
+        string userFile = $"{userName}.xml";
+        string userPathAndFile = Path.Combine(pathToDirectory, userFile);
+        if (File.Exists(userPathAndFile)) return true;
+        return false;
+    }
+    public static bool ExistsUserName(string userName)
+    {
+        if (!File.Exists(allUsersPathAndFile) || !Directory.Exists(pathToDirectory)) return false;
+        foreach (var row in File.ReadAllLines(allUsersPathAndFile))
+        {
+            var data = row.Split(';');
+            if (data.Length >= 1 && data[0] == userName) return true;
+        }
+        return false;
+    }
+    public static bool ExistsManagerName(string managerName)
+    {
+        if (!File.Exists(allManagersPathAndFile) || !Directory.Exists(pathToDirectory)) return false;
+        foreach (var row in File.ReadAllLines(allManagersPathAndFile))
+        {
+            var data = row.Split(';');
+            if (data.Length >= 1 && data[0] == managerName) return true;
+        }
+        return false;
     }
 }
