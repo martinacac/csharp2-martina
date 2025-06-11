@@ -10,6 +10,11 @@ class Program
         Manager loggedManager = new Manager();
         if (!Utils.ExistsDirectory()) Directory.CreateDirectory(Utils.pathToDirectory);
         if (!Utils.ExistsAllUsersFile()) File.Create(Utils.allUsersPathAndFile).Close();
+        if (!Utils.ExistsAllManagersFile())
+        {
+            string managerAndCodedPassword = $"{Utils.defaultManagerName};{Utils.EncodePassword(Utils.defaultManagerPassword)}\n";
+            File.WriteAllText(Utils.allManagersPathAndFile, managerAndCodedPassword);
+        }
 
         do
         {
@@ -40,13 +45,12 @@ class Program
                         }
                     case "3":
                         {
-                            System.Console.WriteLine("To zatím neumím.");
                             Utils.SignUpUser();
                             break;
                         }
                     case "0":
                         {
-                            System.Console.WriteLine("Ukončuji program.");
+                            System.Console.WriteLine("Ending program.");
                             return;
                         }
                     default:

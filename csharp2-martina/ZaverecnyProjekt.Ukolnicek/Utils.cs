@@ -10,8 +10,8 @@ public class Utils
     public static string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
     public static string allUsersFile = "users.txt";
     public static string allManagersFile = "managers.txt";
-    static string defaultManagerName = "firstmanager";
-    static string defaultManagerPassword = "bigboss";
+    public static string defaultManagerName = "firstmanager";
+    public static string defaultManagerPassword = "bigboss";
 
     public static string allUsersPathAndFile = Path.Combine(pathToDirectory, allUsersFile);
     public static string allManagersPathAndFile = Path.Combine(pathToDirectory, allManagersFile);

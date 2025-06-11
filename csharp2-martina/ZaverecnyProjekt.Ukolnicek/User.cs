@@ -17,8 +17,8 @@ public class User : GeneralUser
     }
     public void UserMenu()
     {
-        bool IsValidInput = false;
-        while (!IsValidInput)
+        bool endUserMenu = false;
+        do
         {
             Console.Clear();
 
@@ -33,36 +33,32 @@ public class User : GeneralUser
             {
                 case "1":
                     {
-                        IsValidInput = true;
                         ListTasks();
                         break;
                     }
                 case "2":
                     {
-                        IsValidInput = true;
                         FindTasks();
                         break;
                     }
                 case "3":
                     {
-                        IsValidInput = true;
                         MarkTaskAsCompleted();
                         break;
                     }
                 case "0":
                     {
-                        IsValidInput = true;
+                        endUserMenu = true;
                         LogOut(); //inherited from GeneralUser
                         break;
                     }
                 default:
                     {
-                        IsValidInput = false;
                         Console.WriteLine("Invalid input. Try again.");
                         break;
                     }
             }
-        }
+        } while (!endUserMenu);
     }
     public void MarkTaskAsCompleted()
     {
@@ -148,19 +144,19 @@ public class User : GeneralUser
         }
         catch (InvalidOperationException ex)
         {
-            System.Console.WriteLine("Chyba ve fromátu XML: " + ex.Message);
+            System.Console.WriteLine("Error in XML format: " + ex.Message);
         }
         catch (XmlException ex)
         {
-            System.Console.WriteLine("Chyba při parsování XML: " + ex.Message);
+            System.Console.WriteLine("Error while parsing XML: " + ex.Message);
         }
         catch (IOException ex)
         {
-            System.Console.WriteLine("Chyba při čtení souboru: " + ex.Message);
+            System.Console.WriteLine("Error while reading file: " + ex.Message);
         }
         catch (Exception ex)
         {
-            System.Console.WriteLine("Neočekávaná chyba: " + ex.Message);
+            System.Console.WriteLine("Unexpected error: " + ex.Message);
         }
         return tasks1;
     }
@@ -199,6 +195,22 @@ public class User : GeneralUser
     public void FindTasks()
     {
         System.Console.WriteLine("Toto se ještě musí dodělat.");
+        Console.Write("Input text to be found in task description: ");
+        string findText = Console.ReadLine().ToLower();
+
+        var foundTasks = GetTasksOfUser().FindAll(t => t.Description.ToLower().Contains(findText));
+
+        if (foundTasks.Count == 0)
+        {
+            Console.WriteLine("No tasks found.");
+        }
+        else
+        {
+            foreach (var t in foundTasks)
+            {
+                Console.WriteLine(t);
+            }
+        }
     }
 
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Security.AccessControl;
 
 namespace ZaverecnyProjekt.Ukolnicek;
 
@@ -64,10 +65,10 @@ public class Manager : GeneralUser
     }
     public void ManagerMenu()
     {
-        bool IsValidInput = false;
-        while (!IsValidInput)
+        bool endManagerMenu = false;
+        do
         {
-            Console.Clear();
+            //Console.Clear();
 
             Console.WriteLine("1) List Tasks");
             Console.WriteLine("2) Find Tasks");
@@ -88,7 +89,7 @@ public class Manager : GeneralUser
                         if (selectedUser != null)
                         {
                             selectedUser.ListTasks();
-                            IsValidInput = true;
+
                             //List<Task> selectedUserTasks = selectedUser.GetTasksOfUser();
                         }
                         else System.Console.WriteLine("User not found.");
@@ -100,7 +101,6 @@ public class Manager : GeneralUser
                         User? selectedUser = GetSelectedUser();
                         if (selectedUser != null)
                         {
-                            IsValidInput = true;
                             selectedUser.FindTasks(); //of specific user
                         }
                         else System.Console.WriteLine("User not found.");
@@ -108,40 +108,77 @@ public class Manager : GeneralUser
                     }
                 case "3":
                     {
-                        IsValidInput = true;
                         AddTask();
                         break;
                     }
                 case "4":
                     {
-                        IsValidInput = true;
                         DeleteTask();
                         break;
                     }
                 case "5":
                     {
-                        IsValidInput = true;
                         Utils.SignUpManager();
                         break;
                     }
                 case "0":
                     {
-                        IsValidInput = true;
+                        endManagerMenu = true;
                         LogOut(); //inherited from GeneralUser
                         break;
                     }
                 default:
                     {
-                        IsValidInput = false;
                         Console.WriteLine("Invalid input. Try again.");
                         break;
                     }
             }
-        }
+        } while (!endManagerMenu);
     }
     public void AddTask()
     {
-        System.Console.WriteLine("Toto se ještě musí dodělat.");
+        //List all users
+        ListUsers();
+        System.Console.WriteLine();
+        //Select a user by index
+        User selectedUser = GetSelectedUser();
+        if (selectedUser == null)
+        {
+            System.Console.WriteLine("No user selected.");
+            Console.ReadKey();
+            return;
+        }
+        //Get task properties
+        string description;
+        do
+        {
+            System.Console.WriteLine("Enter task description: ");
+            description = Console.ReadLine();
+            if (string.IsNullOrEmpty(description))
+            {
+                System.Console.WriteLine("Description cannot be empty.");
+            }
+        } while (string.IsNullOrEmpty(description));
+
+        DateTime dueDate;
+        string[] formats = { "dd.MM.yyyy", "dd/MM/yyyy", "dd-MM-yyyy" };
+        System.Console.Write("Enter due date (dd.MM.yyyy): ");
+        while (!DateTime.TryParseExact(Console.ReadLine(), formats, null, System.Globalization.DateTimeStyles.None, out dueDate))
+        {
+            System.Console.WriteLine("Invalid date format. Please use dd.MM.yyyy or dd/MM/yyyy: ");
+            System.Console.Write("Enter due date (dd.MM.yyyy): ");
+        }
+
+        System.Console.WriteLine("Is this a high priority task? (y/n): ");
+        bool highPriority = Console.ReadLine().ToLower() == "y";
+
+        //Create and add the new task, save the task
+        Task newTask = new Task(description, dueDate, highPriority);
+        List<Task> userTasks = selectedUser.GetTasksOfUser() ?? new List<Task>();
+        userTasks.Add(newTask);
+        selectedUser.SaveTasks(userTasks);
+        System.Console.WriteLine("Task added successfully.");
+        Console.ReadKey();
     }
     public void DeleteTask()
     {

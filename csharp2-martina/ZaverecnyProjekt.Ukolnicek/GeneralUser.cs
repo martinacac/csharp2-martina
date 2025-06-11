@@ -16,6 +16,6 @@ public abstract class GeneralUser
 
     public void LogOut()
     {
-        System.Console.WriteLine("Toto se ještě musí dodělat.");
+        System.Console.WriteLine("You have been logged out. Returning to the main menu.");
     }
 }
