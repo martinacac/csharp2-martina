@@ -21,13 +21,14 @@ class Program
             if (loggedUser == null && loggedManager == null)
             {
                 Console.Clear();
-                Console.WriteLine("------------------------");
+                Console.WriteLine("========================");
                 Console.WriteLine("TASK TRACKER - Main Menu");
-                Console.WriteLine("------------------------");
+                Console.WriteLine("========================");
                 Console.WriteLine("1) Log in as User");
                 Console.WriteLine("2) Log in as Manager");
                 Console.WriteLine("3) Sign up as new User");
                 Console.WriteLine("0) End program");
+                Console.WriteLine("------------------------");
                 Console.Write("Your choice (0-3): ");
                 string choice = Console.ReadLine();
 
@@ -51,6 +52,7 @@ class Program
                     case "0":
                         {
                             System.Console.WriteLine("Ending program.");
+                            Console.ReadLine();
                             return;
                         }
                     default:

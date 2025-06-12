@@ -20,12 +20,15 @@ public class User : GeneralUser
         bool endUserMenu = false;
         do
         {
-            Console.Clear();
-
+            //Console.Clear();
+            Console.WriteLine("------------------------");
+            Console.WriteLine("TASK TRACKER - User Menu");
+            Console.WriteLine("------------------------");
             Console.WriteLine("1) List Tasks");
             Console.WriteLine("2) Find Tasks");
             Console.WriteLine("3) Mark Task as Completed");
             Console.WriteLine("0) Log out");
+            Console.WriteLine("------------------------");
             Console.Write("Your choice (0-3): ");
             string choice = Console.ReadLine();
 
@@ -188,13 +191,12 @@ public class User : GeneralUser
         int index = 1;
         foreach (Task t in Tasks)
         {
-            System.Console.WriteLine($"Task number: {index++} - {t.Description}; High priority: {t.HighPriority}; Due date: {t.DueDate.ToString("dd.MM.yyyy")}; Completed: {t.Completed}");
+            System.Console.WriteLine($"Task number: {index++.ToString().PadRight(3, ' ')} - {t.Description.PadRight(20, '.')}; High priority: {(t.HighPriority ? "Yes" : "No")}; Due: {t.DueDate.ToString("dd.MM.yyyy")}; Completed: {(t.Completed ? "Yes" : "No")}");
         }
     }
 
     public void FindTasks()
     {
-        System.Console.WriteLine("Toto se ještě musí dodělat.");
         Console.Write("Input text to be found in task description: ");
         string findText = Console.ReadLine().ToLower();
 

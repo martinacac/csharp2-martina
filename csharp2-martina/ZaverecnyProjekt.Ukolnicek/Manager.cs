@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Security.AccessControl;
 
 namespace ZaverecnyProjekt.Ukolnicek;
@@ -48,7 +49,7 @@ public class Manager : GeneralUser
                     validIndex = false;
                     Console.WriteLine("Invalid index. Try again.");
                 }
-                else index--;
+                else index--; //convert to zero-based index
             } while (!validIndex);
 
 
@@ -69,13 +70,16 @@ public class Manager : GeneralUser
         do
         {
             //Console.Clear();
-
+            Console.WriteLine("---------------------------");
+            Console.WriteLine("TASK TRACKER - Manager Menu");
+            Console.WriteLine("---------------------------");
             Console.WriteLine("1) List Tasks");
             Console.WriteLine("2) Find Tasks");
             Console.WriteLine("3) Add Task");
             Console.WriteLine("4) Delete Task");
             Console.WriteLine("5) Sign up new Manager");
             Console.WriteLine("0) Log out");
+            Console.WriteLine("---------------------------");
             Console.Write("Your choice (0-4): ");
             string choice = Console.ReadLine();
 
@@ -182,7 +186,61 @@ public class Manager : GeneralUser
     }
     public void DeleteTask()
     {
-        System.Console.WriteLine("Toto se ještě musí dodělat.");
+        //List users
+        ListUsers();
+        System.Console.WriteLine();
+        //Select user by index
+        User selectedUser = GetSelectedUser();
+        if (selectedUser == null)
+        {
+            System.Console.WriteLine("No user selected.");
+            Console.ReadKey();
+            return;
+        }
+        //Load and list tasks of selected user
+        List<Task> userTasks = selectedUser.GetTasksOfUser();
+        if (userTasks == null || userTasks.Count == 0)
+        {
+            System.Console.WriteLine("No tasks found for this user.");
+            Console.ReadKey();
+            return;
+        }
+        System.Console.WriteLine($"Tasks of user {selectedUser.Name}:");
+        for (int i = 0; i < userTasks.Count; i++)
+        {
+            System.Console.WriteLine($"Task number: {(i + 1).ToString().PadRight(3, ' ')} - {userTasks[i].Description.PadRight(20, '.')} Due: {userTasks[i].DueDate:dd.MM.yyyy}, High priority:{(userTasks[i].HighPriority ? "Yes" : "No")} Completed: {(userTasks[i].Completed ? "Yes" : "No")}");
+        }
+        //Select task to delete
+        bool validIndex = false;
+        int index;
+        do
+        {
+            System.Console.WriteLine("Input number of task to delete: ");
+            validIndex = int.TryParse(Console.ReadLine(), out index);
+            if (!validIndex || index < 1 || index > userTasks.Count)
+            {
+                validIndex = false;
+                Console.WriteLine("Invalid index. Try again.");
+            }
+            else
+            {
+                validIndex = true;
+                index--; //convert to zero-based index;
+            }
+        } while (!validIndex);
+        //Confirm task to delete
+        System.Console.WriteLine($"Delete task {(index + 1).ToString().PadRight(3, ' ')} - {userTasks[index].Description.PadRight(20, '.')} Due: {userTasks[index].DueDate:dd.MM.yyyy}, Priority:{(userTasks[index].HighPriority ? "Yes" : "No")}? (y/n)");
+        string deleteConfirmed = Console.ReadLine();
+        //Delete task and save
+        if (deleteConfirmed.ToLower() == "y")
+        {
+            userTasks.RemoveAt(index);
+            selectedUser.SaveTasks(userTasks);
+            System.Console.WriteLine($"Task: {userTasks[index]} successfully deleted.");
+            System.Console.ReadKey();
+        }
+        else System.Console.WriteLine("No task deleted.");
+        System.Console.ReadKey();
     }
 
 
