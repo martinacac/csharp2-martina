@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace ZaverecnyProjekt.Ukolnicek;
 
@@ -28,19 +29,21 @@ public class Utils
     }
     public static User? LogInUser()
     {
-
+        //check if file is empty or non-existent
+        var fileInfo = new FileInfo(Utils.allUsersPathAndFile);
+        if (!File.Exists(allUsersPathAndFile) || !Directory.Exists(pathToDirectory) || fileInfo.Length == 0)
+        {
+            Console.WriteLine("No registered users found.");
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
+            return null;
+        }
         Console.Write("Input user name: ");
         string name = Console.ReadLine();
+
         Console.Write("Input password: ");
         string password = Console.ReadLine();
         string codedPassword = EncodePassword(password);
-
-        if (!File.Exists(allUsersPathAndFile) || !Directory.Exists(pathToDirectory))
-        {
-            Console.WriteLine("No registered users found.");
-            Console.ReadKey();
-            return null;
-        }
 
         foreach (var row in File.ReadAllLines(allUsersPathAndFile))
         {
@@ -53,12 +56,14 @@ public class Utils
                 };
                 loggedUser.Tasks = loggedUser.GetTasksOfUser();
                 Console.WriteLine($"Login successful, welcome {loggedUser.Name}.");
-                Console.ReadKey();
+                Console.WriteLine("Press Enter to continue...");
+                Console.ReadLine();
                 return loggedUser;
             }
         }
         Console.WriteLine("Invalid credentials.");
-        Console.ReadKey();
+        Console.WriteLine("Press Enter to continue...");
+        Console.ReadLine();
         return null;
     }
     public static Manager? LogInManager()
@@ -80,7 +85,8 @@ public class Utils
         if (!File.Exists(allManagersPathAndFile) || !Directory.Exists(pathToDirectory))
         {
             Console.WriteLine("No registered managers found.");
-            Console.ReadKey();
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
             return null;
         }
 
@@ -95,12 +101,14 @@ public class Utils
                 };
 
                 Console.WriteLine($"Login successful, welcome {loggedManager.Name}.");
-                Console.ReadKey();
+                Console.WriteLine("Press Enter to continue...");
+                Console.ReadLine();
                 return loggedManager;
             }
         }
         Console.WriteLine("Invalid credentials.");
-        Console.ReadKey();
+        Console.WriteLine("Press Enter to continue...");
+        Console.ReadLine();
         return null;
     }
     public static void SignUpUser()
@@ -151,7 +159,7 @@ public class Utils
                 repeatInput = true;
                 continue;
             }
-            Console.Write($"Input password for verification): ");
+            Console.Write($"Input password for verification: ");
             string password2 = Console.ReadLine();
             if (password != password2)
             {
@@ -168,6 +176,12 @@ public class Utils
         {
             File.AppendAllText(allUsersPathAndFile, userAndCodedPassword);
             File.Create(userPathAndFile).Close();
+            List<Task> emptyTasks = new List<Task>();
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Task>));
+            using (var stream = new FileStream(userPathAndFile, FileMode.Create))
+            {
+                serializer.Serialize(stream, emptyTasks);
+            }
             Console.WriteLine($"Sign up of user {name} successfully completed.");
         }
         else

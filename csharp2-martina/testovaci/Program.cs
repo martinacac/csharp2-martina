@@ -19,6 +19,8 @@ class Program
 
         string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
+        System.Console.WriteLine(pathToDirectory);
+        Console.ReadKey();
         string allUsersFile = "users.txt";
         string allManagersFile = "managers.txt";
         string allUsersPathAndFile = Path.Combine(pathToDirectory, allUsersFile);
@@ -27,7 +29,7 @@ class Program
         string password = "petr2";
         string userFile = $"{name}.xml";
         string userPathAndFile = Path.Combine(pathToDirectory, userFile);
-        System.Console.WriteLine(userFile);
+        System.Console.WriteLine(userPathAndFile);
         //System.Console.WriteLine($"{name}.txt");
 
         //string userPathAndFile = Path.Combine(pathToDirectory, userFile);

@@ -15,7 +15,8 @@ public class Manager : GeneralUser
         if (!File.Exists(Utils.allUsersPathAndFile) || !Directory.Exists(Utils.pathToDirectory))
         {
             Console.WriteLine("No registered users found.");
-            Console.ReadKey();
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
         }
         else
         {
@@ -32,7 +33,8 @@ public class Manager : GeneralUser
         if (!File.Exists(Utils.allUsersPathAndFile) || !Directory.Exists(Utils.pathToDirectory))
         {
             Console.WriteLine("No registered users found.");
-            Console.ReadKey();
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
             return null;
         }
         else
@@ -52,8 +54,8 @@ public class Manager : GeneralUser
                 else index--; //convert to zero-based index
             } while (!validIndex);
 
-
-            Console.ReadKey();
+            //Console.WriteLine("Press Enter to continue...");
+            //Console.ReadLine();
 
             string userLine = File.ReadAllLines(Utils.allUsersPathAndFile)[index];
             User selectedUser = new User
@@ -69,7 +71,7 @@ public class Manager : GeneralUser
         bool endManagerMenu = false;
         do
         {
-            //Console.Clear();
+            Console.Clear();
             Console.WriteLine("---------------------------");
             Console.WriteLine("TASK TRACKER - Manager Menu");
             Console.WriteLine("---------------------------");
@@ -149,7 +151,8 @@ public class Manager : GeneralUser
         if (selectedUser == null)
         {
             System.Console.WriteLine("No user selected.");
-            Console.ReadKey();
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
             return;
         }
         //Get task properties
@@ -173,7 +176,7 @@ public class Manager : GeneralUser
             System.Console.Write("Enter due date (dd.MM.yyyy): ");
         }
 
-        System.Console.WriteLine("Is this a high priority task? (y/n): ");
+        System.Console.Write("Is this a high priority task? (y/n): ");
         bool highPriority = Console.ReadLine().ToLower() == "y";
 
         //Create and add the new task, save the task
@@ -182,7 +185,8 @@ public class Manager : GeneralUser
         userTasks.Add(newTask);
         selectedUser.SaveTasks(userTasks);
         System.Console.WriteLine("Task added successfully.");
-        Console.ReadKey();
+        Console.WriteLine("Press Enter to continue...");
+        Console.ReadLine();
     }
     public void DeleteTask()
     {
@@ -194,7 +198,8 @@ public class Manager : GeneralUser
         if (selectedUser == null)
         {
             System.Console.WriteLine("No user selected.");
-            Console.ReadKey();
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
             return;
         }
         //Load and list tasks of selected user
@@ -202,7 +207,8 @@ public class Manager : GeneralUser
         if (userTasks == null || userTasks.Count == 0)
         {
             System.Console.WriteLine("No tasks found for this user.");
-            Console.ReadKey();
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
             return;
         }
         System.Console.WriteLine($"Tasks of user {selectedUser.Name}:");
@@ -230,17 +236,18 @@ public class Manager : GeneralUser
         } while (!validIndex);
         //Confirm task to delete
         System.Console.WriteLine($"Delete task {(index + 1).ToString().PadRight(3, ' ')} - {userTasks[index].Description.PadRight(20, '.')} Due: {userTasks[index].DueDate:dd.MM.yyyy}, Priority:{(userTasks[index].HighPriority ? "Yes" : "No")}? (y/n)");
-        string deleteConfirmed = Console.ReadLine();
         //Delete task and save
-        if (deleteConfirmed.ToLower() == "y")
+        if (Console.ReadLine().ToLower() == "y")
         {
             userTasks.RemoveAt(index);
             selectedUser.SaveTasks(userTasks);
             System.Console.WriteLine($"Task: {userTasks[index]} successfully deleted.");
-            System.Console.ReadKey();
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
         }
         else System.Console.WriteLine("No task deleted.");
-        System.Console.ReadKey();
+        Console.WriteLine("Press Enter to continue...");
+        Console.ReadLine();
     }
 
 

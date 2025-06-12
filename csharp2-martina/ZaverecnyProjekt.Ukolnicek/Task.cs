@@ -9,7 +9,7 @@ public class Task
     public bool HighPriority { get; set; }
     public DateTime DueDate { get; set; }
     public bool Completed { get; set; }
-    //public string UserName { get;  set; }
+
     public Task(string description, DateTime dueDate, bool highPriority = false, bool completed = false)
     {
         Description = description;
@@ -17,5 +17,6 @@ public class Task
         DueDate = dueDate;
         Completed = completed;
     }
+    public Task() { } //parameterless constructor for XmlSerializer
 
 }

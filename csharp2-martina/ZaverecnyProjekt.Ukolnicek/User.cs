@@ -20,7 +20,7 @@ public class User : GeneralUser
         bool endUserMenu = false;
         do
         {
-            //Console.Clear();
+            Console.Clear();
             Console.WriteLine("------------------------");
             Console.WriteLine("TASK TRACKER - User Menu");
             Console.WriteLine("------------------------");
@@ -87,7 +87,8 @@ public class User : GeneralUser
         {
             Console.WriteLine("Invalid number.");
         }
-        Console.ReadKey();
+        Console.WriteLine("Press Enter to continue...");
+        Console.ReadLine();
     }
 
     public void SaveTasks(List<Task> tasks)
@@ -119,7 +120,7 @@ public class User : GeneralUser
 
     public List<Task> GetTasksOfUser()
     {
-        List<Task> tasks1 = new List<Task>();
+        //List<Task> tasks1 = new List<Task>();
         //string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         //string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
         if (!Directory.Exists(Utils.pathToDirectory))
@@ -127,41 +128,52 @@ public class User : GeneralUser
             Directory.CreateDirectory(Utils.pathToDirectory);
         }
         string userXmlFile = $"{Name}.xml";
-
         string pathToXmlFileInDirectory = Path.Combine(Utils.pathToDirectory, userXmlFile);
 
+        if (!File.Exists(pathToXmlFileInDirectory))
+        {
+            System.Console.WriteLine("Tasks not found.");
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
+            return new List<Task>(); //return empty list (not null)
+        }
+        //check if file is empty
+        var fielInfo = new FileInfo(pathToXmlFileInDirectory);
+        if (fielInfo.Length == 0)
+        {
+            return new List<Task>();
+        }
         try
         {
-            if (!File.Exists(pathToXmlFileInDirectory))
-            {
-                System.Console.WriteLine("Tasks not found.");
-                Console.ReadKey();
-                return null;
-            }
+
 
             XmlSerializer taskSerializer = new XmlSerializer(typeof(List<Task>));
             using (StreamReader reader = new StreamReader(pathToXmlFileInDirectory))
             {
-                tasks1 = taskSerializer.Deserialize(reader) as List<Task>;
+                return taskSerializer.Deserialize(reader) as List<Task>;
             }
         }
         catch (InvalidOperationException ex)
         {
             System.Console.WriteLine("Error in XML format: " + ex.Message);
+            return new List<Task>();
         }
         catch (XmlException ex)
         {
             System.Console.WriteLine("Error while parsing XML: " + ex.Message);
+            return new List<Task>();
         }
         catch (IOException ex)
         {
             System.Console.WriteLine("Error while reading file: " + ex.Message);
+            return new List<Task>();
         }
         catch (Exception ex)
         {
             System.Console.WriteLine("Unexpected error: " + ex.Message);
+            return new List<Task>();
         }
-        return tasks1;
+
     }
 
     /*List<Task> tasks = new List<Task>();
@@ -189,10 +201,22 @@ public class User : GeneralUser
     {
         System.Console.WriteLine($"User: {Name} - List of tasks: ");
         int index = 1;
-        foreach (Task t in Tasks)
+        if (Tasks.Count == 0)
         {
-            System.Console.WriteLine($"Task number: {index++.ToString().PadRight(3, ' ')} - {t.Description.PadRight(20, '.')}; High priority: {(t.HighPriority ? "Yes" : "No")}; Due: {t.DueDate.ToString("dd.MM.yyyy")}; Completed: {(t.Completed ? "Yes" : "No")}");
+            System.Console.WriteLine("No tasks found.");
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
         }
+        else
+        {
+            GetTasksOfUser();
+            foreach (Task t in Tasks)
+            {
+                System.Console.WriteLine($"Task number: {index++.ToString().PadRight(3, ' ')} - {t.Description.PadRight(20, '.')}; High priority: {(t.HighPriority ? "Yes" : "No")}; Due: {t.DueDate.ToString("dd.MM.yyyy")}; Completed: {(t.Completed ? "Yes" : "No")}");
+            }
+        }
+        Console.WriteLine("Press Enter to continue...");
+        Console.ReadLine();
     }
 
     public void FindTasks()
@@ -213,6 +237,8 @@ public class User : GeneralUser
                 Console.WriteLine(t);
             }
         }
+        Console.WriteLine("Press Enter to continue...");
+        Console.ReadLine();
     }
 
 }

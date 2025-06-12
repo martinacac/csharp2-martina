@@ -8,6 +8,8 @@ class Program
     {
         User loggedUser = new User();
         Manager loggedManager = new Manager();
+        loggedUser = null;
+        loggedManager = null;
         if (!Utils.ExistsDirectory()) Directory.CreateDirectory(Utils.pathToDirectory);
         if (!Utils.ExistsAllUsersFile()) File.Create(Utils.allUsersPathAndFile).Close();
         if (!Utils.ExistsAllManagersFile())
@@ -52,6 +54,7 @@ class Program
                     case "0":
                         {
                             System.Console.WriteLine("Ending program.");
+                            Console.WriteLine("Press Enter to continue...");
                             Console.ReadLine();
                             return;
                         }
@@ -65,11 +68,13 @@ class Program
             else if (loggedUser != null)
             {
                 loggedUser.UserMenu();
+                loggedUser = null;
 
             }
             else if (loggedManager != null)
             {
                 loggedManager.ManagerMenu();
+                loggedManager = null;
             }
         } while (true);
     }
