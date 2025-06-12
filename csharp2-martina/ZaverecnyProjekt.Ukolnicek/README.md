@@ -5,28 +5,43 @@
 
 ### public class Task
 
-string Description, bool HighPriority, DateTime DueDate, bool Completed, string UserName
+string Description, bool HighPriority, DateTime DueDate, bool Completed
 
 ### public class abstract GeneralUser
 
 string Name, string Password
 
-1. LogIn
-2. LogOut
-3. EndProgram
+1. LogOut
 
 ### public class User : GeneralUser
 
 base(string name), base(string password)
 
-1. SignUpAsNewUser
-2. MarkTaskAsCompleted
-3. ListTasks
-4. FindTasks
+1. ListTasks
+2. FindTasks
+3. MarkTaskAsCompleted
 
 ### public class Manager : GeneralUser
 
 base(name), base(password)
 
-1. AddTask
-2. DeleteTask
+1. ListTasks
+2. FindTasks
+3. AddTask
+4. DeleteTask
+5. SignUpManager
+
+before SignUpManager default setting is used:
+defaultManagerName = "firstmanager"
+defaultManagerPassword = "bigboss"
+
+### public class Utils
+
+1. LogInUser
+2. LogInManager
+3. SignUpUser
+4. SignUpManager
+
+### public class Program
+
+1. EndProgram
