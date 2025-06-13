@@ -55,7 +55,12 @@ class Program
                     case "4":
                         {
                             if (loggedUser != null) loggedUser.LogOut(); //inherited from GeneralUser
-                            if (loggedManager != null) loggedManager.LogOut();
+                            else if (loggedManager != null) loggedManager.LogOut();
+                            else
+                            {
+                                System.Console.WriteLine("Logout successful.");
+                                Utils.WaitForEnter();
+                            }
                             break;
                         }
                     case "0":

@@ -15,7 +15,7 @@ public abstract class GeneralUser
         Password = encodedPassword;
     }
 
-    public void LogOut()
+    public virtual void LogOut()
     {
         System.Console.WriteLine("You have been logged out.");
         Utils.WaitForEnter();
