@@ -128,7 +128,6 @@ public class Manager : GeneralUser
                 case "0":
                     {
                         endManagerMenu = true;
-
                         break;
                     }
                 default:
@@ -172,12 +171,17 @@ public class Manager : GeneralUser
             System.Console.WriteLine("Invalid date format. Please use dd.MM.yyyy or dd/MM/yyyy: ");
             System.Console.Write("Enter due date (dd.MM.yyyy): ");
         }
+        if (dueDate < DateTime.Today)
+        {
+            System.Console.WriteLine("Your due date is in the past. Do you want to continue? (y/n): ");
+            if (Console.ReadLine() == "n") return;
+        }
 
         System.Console.Write("Is this a high priority task? (y/n): ");
         bool highPriority = Console.ReadLine().ToLower() == "y";
         //Get confirmation
         Task newTask = new Task(description, dueDate, highPriority);
-        System.Console.Write($"Add task: {newTask.Description.PadRight(20, ' ')} Due: {newTask.DueDate:dd.MM.yyyy}, High Priority: {(newTask.HighPriority ? "Yes" : "No")} ? (y/n):");
+        System.Console.Write($"Add task: {newTask.Description.PadRight(20, ' ')} Due: {newTask.DueDate:dd.MM.yyyy}, High Priority: {(newTask.HighPriority ? "Yes" : "No")} ? (y/n): ");
         //Create and add the new task, save the task
         if (Console.ReadLine().ToLower() == "y")
         {

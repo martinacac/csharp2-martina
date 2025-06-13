@@ -17,7 +17,7 @@ public class Utils
     public static string allUsersPathAndFile = Path.Combine(appRootDirectoryPath, allUsersFile);
     public static string allManagersPathAndFile = Path.Combine(appRootDirectoryPath, allManagersFile);
     public static char[] invalidFileNameChar = Path.GetInvalidFileNameChars();
-    public static string[] supportedDateFormats = { "dd.MM.yyyy", "dd/MM/yyyy", "dd-MM-yyyy", "dd.M.yyyy", "dd/M/yyyy", "dd-M-yyyy" };
+    public static string[] supportedDateFormats = { "dd.MM.yyyy", "dd/MM/yyyy", "dd-MM-yyyy", "d.M.yyyy", "d/M/yyyy", "d-M-yyyy" };
 
     public static string EncodePassword(string password)
     {
