@@ -8,15 +8,16 @@ public class Utils
 {
     //for public static methods and var
     public static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-    public static string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
+    public static string appRootDirectoryPath = Path.Combine(appDataPath, "TaskTracker");
     public static string allUsersFile = "users.txt";
     public static string allManagersFile = "managers.txt";
     public static string defaultManagerName = "firstmanager";
     public static string defaultManagerPassword = "bigboss";
 
-    public static string allUsersPathAndFile = Path.Combine(pathToDirectory, allUsersFile);
-    public static string allManagersPathAndFile = Path.Combine(pathToDirectory, allManagersFile);
-    public static char[] invalidFileNameChar = { '\\', '|', '/', ':', '<', '>', '*', '?', '"' };
+    public static string allUsersPathAndFile = Path.Combine(appRootDirectoryPath, allUsersFile);
+    public static string allManagersPathAndFile = Path.Combine(appRootDirectoryPath, allManagersFile);
+    public static char[] invalidFileNameChar = Path.GetInvalidFileNameChars();
+    public static string[] supportedDateFormats = { "dd.MM.yyyy", "dd/MM/yyyy", "dd-MM-yyyy", "dd.M.yyyy", "dd/M/yyyy", "dd-M-yyyy" };
 
     public static string EncodePassword(string password)
     {
@@ -31,11 +32,10 @@ public class Utils
     {
         //check if file is empty or non-existent
         var fileInfo = new FileInfo(Utils.allUsersPathAndFile);
-        if (!File.Exists(allUsersPathAndFile) || !Directory.Exists(pathToDirectory) || fileInfo.Length == 0)
+        if (!File.Exists(allUsersPathAndFile) || !Directory.Exists(appRootDirectoryPath) || fileInfo.Length == 0)
         {
             Console.WriteLine("No registered users found.");
-            Console.WriteLine("Press Enter to continue...");
-            Console.ReadLine();
+            Utils.WaitForEnter();
             return null;
         }
         Console.Write("Input user name: ");
@@ -56,14 +56,12 @@ public class Utils
                 };
                 loggedUser.Tasks = loggedUser.GetTasksOfUser();
                 Console.WriteLine($"Login successful, welcome {loggedUser.Name}.");
-                Console.WriteLine("Press Enter to continue...");
-                Console.ReadLine();
+                Utils.WaitForEnter();
                 return loggedUser;
             }
         }
         Console.WriteLine("Invalid credentials.");
-        Console.WriteLine("Press Enter to continue...");
-        Console.ReadLine();
+        Utils.WaitForEnter();
         return null;
     }
     public static Manager? LogInManager()
@@ -82,11 +80,10 @@ public class Utils
             password = Console.ReadLine();
             codedPassword = EncodePassword(password);
         } while (string.IsNullOrEmpty(password));
-        if (!File.Exists(allManagersPathAndFile) || !Directory.Exists(pathToDirectory))
+        if (!File.Exists(allManagersPathAndFile) || !Directory.Exists(appRootDirectoryPath))
         {
             Console.WriteLine("No registered managers found.");
-            Console.WriteLine("Press Enter to continue...");
-            Console.ReadLine();
+            Utils.WaitForEnter();
             return null;
         }
 
@@ -101,14 +98,12 @@ public class Utils
                 };
 
                 Console.WriteLine($"Login successful, welcome {loggedManager.Name}.");
-                Console.WriteLine("Press Enter to continue...");
-                Console.ReadLine();
+                Utils.WaitForEnter();
                 return loggedManager;
             }
         }
         Console.WriteLine("Invalid credentials.");
-        Console.WriteLine("Press Enter to continue...");
-        Console.ReadLine();
+        Utils.WaitForEnter();
         return null;
     }
     public static void SignUpUser()
@@ -171,7 +166,7 @@ public class Utils
 
         string userAndCodedPassword = $"{name};{codedPassword}\n";
         string userFile = $"{name}.xml";
-        string userPathAndFile = Path.Combine(pathToDirectory, userFile);
+        string userPathAndFile = Path.Combine(appRootDirectoryPath, userFile);
         if (!ExistsUserNameFile(name))
         {
             File.AppendAllText(allUsersPathAndFile, userAndCodedPassword);
@@ -270,7 +265,7 @@ public class Utils
     }
     public static bool ExistsDirectory()
     {
-        if (Directory.Exists(pathToDirectory)) return true;
+        if (Directory.Exists(appRootDirectoryPath)) return true;
         return false;
     }
     public static bool ExistsAllUsersFile()
@@ -286,13 +281,13 @@ public class Utils
     public static bool ExistsUserNameFile(string userName)
     {
         string userFile = $"{userName}.xml";
-        string userPathAndFile = Path.Combine(pathToDirectory, userFile);
+        string userPathAndFile = Path.Combine(appRootDirectoryPath, userFile);
         if (File.Exists(userPathAndFile)) return true;
         return false;
     }
     public static bool ExistsUserName(string userName)
     {
-        if (!File.Exists(allUsersPathAndFile) || !Directory.Exists(pathToDirectory)) return false;
+        if (!File.Exists(allUsersPathAndFile) || !Directory.Exists(appRootDirectoryPath)) return false;
         foreach (var row in File.ReadAllLines(allUsersPathAndFile))
         {
             var data = row.Split(';');
@@ -302,12 +297,17 @@ public class Utils
     }
     public static bool ExistsManagerName(string managerName)
     {
-        if (!File.Exists(allManagersPathAndFile) || !Directory.Exists(pathToDirectory)) return false;
+        if (!File.Exists(allManagersPathAndFile) || !Directory.Exists(appRootDirectoryPath)) return false;
         foreach (var row in File.ReadAllLines(allManagersPathAndFile))
         {
             var data = row.Split(';');
             if (data.Length >= 1 && data[0] == managerName) return true;
         }
         return false;
+    }
+    public static void WaitForEnter()
+    {
+        Console.WriteLine("Press Enter to continue...");
+        Console.ReadLine();
     }
 }

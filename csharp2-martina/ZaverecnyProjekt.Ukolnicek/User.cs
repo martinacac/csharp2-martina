@@ -7,14 +7,17 @@ namespace ZaverecnyProjekt.Ukolnicek;
 public class User : GeneralUser
 {
     public List<Task> Tasks { get; set; }
-    public User() { }
-    public User(string name = "Null", string password = "Null") : base(name, password)
+    private readonly XmlSerializer tasksSerializer;
+    public User()
+    {
+        tasksSerializer = new XmlSerializer(typeof(List<Task>)); //pak už není nutné v kódu mít XmlSerializer taskSerializer = new XmlSerializer(typeof(List<Task>));
+    }
+    //public User() { } 
+
+    public User(string name, string password) : base(name, password)
     {
     }
-    public User(string name, List<Task> tasks) : base(name)
-    {
-        Tasks = tasks;
-    }
+
     public void UserMenu()
     {
         bool endUserMenu = false;
@@ -22,12 +25,12 @@ public class User : GeneralUser
         {
             Console.Clear();
             Console.WriteLine("------------------------");
-            Console.WriteLine("TASK TRACKER - User Menu");
+            Console.WriteLine($"TASK TRACKER - User Menu - {Name}");
             Console.WriteLine("------------------------");
             Console.WriteLine("1) List Tasks");
             Console.WriteLine("2) Find Tasks");
             Console.WriteLine("3) Mark Task as Completed");
-            Console.WriteLine("0) Log out");
+            Console.WriteLine("0) Return to Main Menu");
             Console.WriteLine("------------------------");
             Console.Write("Your choice (0-3): ");
             string choice = Console.ReadLine();
@@ -52,7 +55,6 @@ public class User : GeneralUser
                 case "0":
                     {
                         endUserMenu = true;
-                        LogOut(); //inherited from GeneralUser
                         break;
                     }
                 default:
@@ -76,37 +78,36 @@ public class User : GeneralUser
             else index--;
         } while (!validIndex);
 
-
-        if (index >= 0 && index < Tasks.Count)
-        {
-            Tasks[index].Completed = true;
-            SaveTasks(Tasks);
-            Console.WriteLine("Task marked as completed.");
-        }
-        else
-        {
-            Console.WriteLine("Invalid number.");
-        }
-        Console.WriteLine("Press Enter to continue...");
-        Console.ReadLine();
+        //Confirm task to mark as completed
+        System.Console.Write($"Mark as completed task: {(index + 1).ToString().PadRight(3, ' ')} - {Tasks[index].Description.PadRight(20, ' ')} Due: {Tasks[index].DueDate:dd.MM.yyyy}, High Priority: {(Tasks[index].HighPriority ? "Yes" : "No")} ? (y/n): ");
+        //Mark task and save
+        if (Console.ReadLine().ToLower() == "y")
+            if (index >= 0 && index < Tasks.Count)
+            {
+                Tasks[index].Completed = true;
+                SaveTasks(Tasks);
+                Console.WriteLine("Task marked as completed.");
+            }
+            else
+            {
+                Console.WriteLine("Invalid number.");
+            }
+        Utils.WaitForEnter();
     }
 
     public void SaveTasks(List<Task> tasks)
     {
         if (tasks != null)
         {
-            XmlSerializer taskSerializer = new XmlSerializer(typeof(List<Task>));
-            //string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            //string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
-            if (!Directory.Exists(Utils.pathToDirectory))
+            if (!Directory.Exists(Utils.appRootDirectoryPath))
             {
-                Directory.CreateDirectory(Utils.pathToDirectory);
+                Directory.CreateDirectory(Utils.appRootDirectoryPath);
             }
             string userXmlFile = $"{Name}.xml";
-            string pathToXmlFileInDirectory = Path.Combine(Utils.pathToDirectory, userXmlFile);
+            string pathToXmlFileInDirectory = Path.Combine(Utils.appRootDirectoryPath, userXmlFile);
             using (StreamWriter writer = new StreamWriter(pathToXmlFileInDirectory))
             {
-                taskSerializer.Serialize(writer, tasks);
+                tasksSerializer.Serialize(writer, tasks);
             }
         }
         else System.Console.WriteLine("No tasks to be saved.");
@@ -120,21 +121,17 @@ public class User : GeneralUser
 
     public List<Task> GetTasksOfUser()
     {
-        //List<Task> tasks1 = new List<Task>();
-        //string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        //string pathToDirectory = Path.Combine(appDataPath, "TaskTracker");
-        if (!Directory.Exists(Utils.pathToDirectory))
+        if (!Directory.Exists(Utils.appRootDirectoryPath))
         {
-            Directory.CreateDirectory(Utils.pathToDirectory);
+            Directory.CreateDirectory(Utils.appRootDirectoryPath);
         }
         string userXmlFile = $"{Name}.xml";
-        string pathToXmlFileInDirectory = Path.Combine(Utils.pathToDirectory, userXmlFile);
+        string pathToXmlFileInDirectory = Path.Combine(Utils.appRootDirectoryPath, userXmlFile);
 
         if (!File.Exists(pathToXmlFileInDirectory))
         {
             System.Console.WriteLine("Tasks not found.");
-            Console.WriteLine("Press Enter to continue...");
-            Console.ReadLine();
+            Utils.WaitForEnter();
             return new List<Task>(); //return empty list (not null)
         }
         //check if file is empty
@@ -145,12 +142,9 @@ public class User : GeneralUser
         }
         try
         {
-
-
-            XmlSerializer taskSerializer = new XmlSerializer(typeof(List<Task>));
             using (StreamReader reader = new StreamReader(pathToXmlFileInDirectory))
             {
-                return taskSerializer.Deserialize(reader) as List<Task>;
+                return tasksSerializer.Deserialize(reader) as List<Task>;
             }
         }
         catch (InvalidOperationException ex)
@@ -173,7 +167,6 @@ public class User : GeneralUser
             System.Console.WriteLine("Unexpected error: " + ex.Message);
             return new List<Task>();
         }
-
     }
 
     /*List<Task> tasks = new List<Task>();
@@ -204,19 +197,17 @@ public class User : GeneralUser
         if (Tasks.Count == 0)
         {
             System.Console.WriteLine("No tasks found.");
-            Console.WriteLine("Press Enter to continue...");
-            Console.ReadLine();
+            Utils.WaitForEnter();
         }
         else
         {
             GetTasksOfUser();
             foreach (Task t in Tasks)
             {
-                System.Console.WriteLine($"Task number: {index++.ToString().PadRight(3, ' ')} - {t.Description.PadRight(20, '.')}; High priority: {(t.HighPriority ? "Yes" : "No")}; Due: {t.DueDate.ToString("dd.MM.yyyy")}; Completed: {(t.Completed ? "Yes" : "No")}");
+                System.Console.WriteLine($"Task number: {index++.ToString().PadRight(3, ' ')} - {t.Description.PadRight(20, ' ')} High priority: {(t.HighPriority ? "Yes" : "No")}, Due: {t.DueDate.ToString("dd.MM.yyyy")}, Completed: {(t.Completed ? "Yes" : "No")}");
             }
         }
-        Console.WriteLine("Press Enter to continue...");
-        Console.ReadLine();
+        Utils.WaitForEnter();
     }
 
     public void FindTasks()
@@ -232,15 +223,14 @@ public class User : GeneralUser
         }
         else
         {
+            int index = 0;
             foreach (var t in foundTasks)
             {
-                Console.WriteLine(t);
+                Console.WriteLine($"Task number: {index++.ToString().PadRight(3, ' ')} - {t.Description.PadRight(20, ' ')} High priority: {(t.HighPriority ? "Yes" : "No")}, Due: {t.DueDate.ToString("dd.MM.yyyy")}, Completed: {(t.Completed ? "Yes" : "No")}");
             }
         }
-        Console.WriteLine("Press Enter to continue...");
-        Console.ReadLine();
+        Utils.WaitForEnter();
     }
-
 }
 
 
