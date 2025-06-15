@@ -19,4 +19,41 @@ public class Task
     }
     public Task() { } //parameterless constructor for XmlSerializer
 
+    public override string ToString()
+    {
+        string openOrCompleted = Completed ? "[COMPLETED]" : "[OPEN]     ";
+        string priority = HighPriority ? "High  " : "Normal";
+        string overdue = (DueDate < DateTime.Today && !Completed) ? "OVERDUE" : "";
+        return $"{openOrCompleted} {Description.PadRight(20, ' ')} | Priority: {priority} | Deadline: {DueDate:dd.MM.yyyy} {overdue}";
+    }
+
+    public virtual void ListTaskInConsole()
+    {
+        var originalColor = Console.ForegroundColor;
+
+        // Set color based on task status
+        if (Completed)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+        }
+        else if (DueDate < DateTime.Now)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+        }
+        else if (HighPriority)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+        }
+
+        // Use the overridden ToString() method
+        Console.Write($"{this}");
+
+        Console.ForegroundColor = originalColor;
+    }
 }
+
+

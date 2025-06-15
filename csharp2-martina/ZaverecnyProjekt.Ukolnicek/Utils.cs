@@ -310,4 +310,15 @@ public class Utils
         Console.WriteLine("Press Enter to continue...");
         Console.ReadLine();
     }
+    public static string PromptTaskFilterType()
+    {
+        Console.WriteLine("Choose task filter:");
+        Console.WriteLine("1) All tasks");
+        Console.WriteLine("2) Overdue tasks");
+        Console.WriteLine("3) Completed tasks");
+        Console.WriteLine("4) Not completed tasks");
+        Console.WriteLine("5) High priority tasks");
+        Console.Write("Your choice (1-5): ");
+        return Console.ReadLine();
+    }
 }

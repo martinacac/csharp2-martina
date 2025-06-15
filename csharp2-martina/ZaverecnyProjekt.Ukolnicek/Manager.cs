@@ -11,6 +11,88 @@ public class Manager : GeneralUser
     {
     }
     public Manager() { }
+
+    public void ManagerMenu()
+    {
+        bool endManagerMenu = false;
+        do
+        {
+            Console.Clear();
+            Console.WriteLine("---------------------------");
+            Console.WriteLine($"TASK TRACKER - Manager Menu - {Name}");
+            Console.WriteLine("---------------------------");
+            Console.WriteLine("1) List Tasks of Selected User");
+            Console.WriteLine("2) List Tasks of All Users");
+            Console.WriteLine("3) Find Tasks");
+            Console.WriteLine("4) Add Task");
+            Console.WriteLine("5) Delete Task");
+            Console.WriteLine("6) Sign up New Manager");
+            Console.WriteLine("0) Return to Main Menu");
+            Console.WriteLine("---------------------------");
+            Console.Write("Your choice (0-5): ");
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    {
+
+                        ListUsers();
+                        User? selectedUser = GetSelectedUser();
+                        if (selectedUser != null)
+                        {
+                            selectedUser.ListTasks();
+
+                            //List<Task> selectedUserTasks = selectedUser.GetTasksOfUser();
+                        }
+                        else System.Console.WriteLine("User not found.");
+                        break;
+                    }
+                case "2":
+                    {
+                        ListAllTasksGroupedByUsersWithFilter();
+                        break;
+                    }
+                case "3":
+                    {
+                        ListUsers();
+                        User? selectedUser = GetSelectedUser();
+                        if (selectedUser != null)
+                        {
+                            selectedUser.FindTasks(); //of specific user
+                        }
+                        else System.Console.WriteLine("User not found.");
+                        break;
+                    }
+                case "4":
+                    {
+                        AddTask();
+                        break;
+                    }
+                case "5":
+                    {
+                        DeleteTask();
+                        break;
+                    }
+                case "6":
+                    {
+                        Utils.SignUpManager();
+                        break;
+                    }
+                case "0":
+                    {
+                        endManagerMenu = true;
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("Invalid input. Try again.");
+                        Utils.WaitForEnter();
+                        break;
+                    }
+            }
+        } while (!endManagerMenu);
+    }
     public void ListUsers()
     {
         if (!File.Exists(Utils.allUsersPathAndFile) || !Directory.Exists(Utils.appRootDirectoryPath))
@@ -45,7 +127,7 @@ public class Manager : GeneralUser
                 Console.Write("Input number of user to be selected: ");
                 validIndex = int.TryParse(Console.ReadLine(), out index);
                 if (!validIndex) Console.WriteLine("Invalid index. Try again.");
-                else if (index < 0 || index > File.ReadAllLines(Utils.allUsersPathAndFile).Length)
+                else if (index < 1 || index > File.ReadAllLines(Utils.allUsersPathAndFile).Length)
                 {
                     validIndex = false;
                     Console.WriteLine("Invalid index. Try again.");
@@ -63,81 +145,6 @@ public class Manager : GeneralUser
             selectedUser.Tasks = selectedUser.GetTasksOfUser();
             return selectedUser;
         }
-    }
-    public void ManagerMenu()
-    {
-        bool endManagerMenu = false;
-        do
-        {
-            Console.Clear();
-            Console.WriteLine("---------------------------");
-            Console.WriteLine($"TASK TRACKER - Manager Menu - {Name}");
-            Console.WriteLine("---------------------------");
-            Console.WriteLine("1) List Tasks");
-            Console.WriteLine("2) Find Tasks");
-            Console.WriteLine("3) Add Task");
-            Console.WriteLine("4) Delete Task");
-            Console.WriteLine("5) Sign up new Manager");
-            Console.WriteLine("0) Return to Main Menu");
-            Console.WriteLine("---------------------------");
-            Console.Write("Your choice (0-5): ");
-            string choice = Console.ReadLine();
-
-            switch (choice)
-            {
-                case "1":
-                    {
-
-                        ListUsers();
-                        User? selectedUser = GetSelectedUser();
-                        if (selectedUser != null)
-                        {
-                            selectedUser.ListTasks();
-
-                            //List<Task> selectedUserTasks = selectedUser.GetTasksOfUser();
-                        }
-                        else System.Console.WriteLine("User not found.");
-                        break;
-                    }
-                case "2":
-                    {
-                        ListUsers();
-                        User? selectedUser = GetSelectedUser();
-                        if (selectedUser != null)
-                        {
-                            selectedUser.FindTasks(); //of specific user
-                        }
-                        else System.Console.WriteLine("User not found.");
-                        break;
-                    }
-                case "3":
-                    {
-                        AddTask();
-                        break;
-                    }
-                case "4":
-                    {
-                        DeleteTask();
-                        break;
-                    }
-                case "5":
-                    {
-                        Utils.SignUpManager();
-                        break;
-                    }
-                case "0":
-                    {
-                        endManagerMenu = true;
-                        break;
-                    }
-                default:
-                    {
-                        Console.WriteLine("Invalid input. Try again.");
-                        Utils.WaitForEnter();
-                        break;
-                    }
-            }
-        } while (!endManagerMenu);
     }
     public void AddTask()
     {
@@ -181,7 +188,7 @@ public class Manager : GeneralUser
         bool highPriority = Console.ReadLine().ToLower() == "y";
         //Get confirmation
         Task newTask = new Task(description, dueDate, highPriority);
-        System.Console.Write($"Add task: {newTask.Description.PadRight(20, ' ')} Due: {newTask.DueDate:dd.MM.yyyy}, High Priority: {(newTask.HighPriority ? "Yes" : "No")} ? (y/n): ");
+        System.Console.Write($"Add task: {newTask} ? (y/n): "); //.Description.PadRight(20, ' ')} Due: {newTask.DueDate:dd.MM.yyyy}, High Priority: {(newTask.HighPriority ? "Yes" : "No")
         //Create and add the new task, save the task
         if (Console.ReadLine().ToLower() == "y")
         {
@@ -213,10 +220,12 @@ public class Manager : GeneralUser
             Utils.WaitForEnter();
             return;
         }
-        System.Console.WriteLine($"Tasks of user {selectedUser.Name}:");
+        System.Console.WriteLine($"User: {selectedUser.Name} - List of tasks: ");
         for (int i = 0; i < userTasks.Count; i++)
         {
-            System.Console.WriteLine($"Task number: {(i + 1).ToString().PadRight(3, ' ')} - {userTasks[i].Description.PadRight(20, '.')} Due: {userTasks[i].DueDate:dd.MM.yyyy}, High priority:{(userTasks[i].HighPriority ? "Yes" : "No")} Completed: {(userTasks[i].Completed ? "Yes" : "No")}");
+            System.Console.Write($"Task number: {(i + 1).ToString().PadRight(3, ' ')} - ");
+            System.Console.WriteLine(userTasks[i]);
+            //{userTasks[i].Description.PadRight(20, '.')} Due: {userTasks[i].DueDate:dd.MM.yyyy}, High priority:{(userTasks[i].HighPriority ? "Yes" : "No")} Completed: {(userTasks[i].Completed ? "Yes" : "No")}");
         }
         //Select task to delete
         bool validIndex = false;
@@ -237,7 +246,9 @@ public class Manager : GeneralUser
             }
         } while (!validIndex);
         //Confirm task to delete
-        System.Console.WriteLine($"Delete task {(index + 1).ToString().PadRight(3, ' ')} - {userTasks[index].Description.PadRight(20, '.')} Due: {userTasks[index].DueDate:dd.MM.yyyy}, Priority:{(userTasks[index].HighPriority ? "Yes" : "No")}? (y/n)");
+        System.Console.Write($"Delete task {(index + 1).ToString().PadRight(3, ' ')} - ");
+        System.Console.WriteLine(userTasks[index]);
+        //{ userTasks[index].Description.PadRight(20, '.')} Due: {userTasks[index].DueDate:dd.MM.yyyy}, Priority:{(userTasks[index].HighPriority ? "Yes" : "No")}? (y/n)");
         //Delete task and save
         if (Console.ReadLine().ToLower() == "y")
         {
@@ -249,6 +260,58 @@ public class Manager : GeneralUser
         else System.Console.WriteLine("No task deleted.");
         Utils.WaitForEnter();
     }
+    public void ListAllTasksGroupedByUsersWithFilter()
+    {
+        if (!File.Exists(Utils.allUsersPathAndFile) || !Directory.Exists(Utils.appRootDirectoryPath))
+        {
+            Console.WriteLine("No registered users found.");
+            Utils.WaitForEnter();
+            return;
+        }
 
+        string filterChoice = Utils.PromptTaskFilterType();
+        Func<Task, bool> filterPredicate = filterChoice switch
+        {
+            "1" => t => true, // All tasks
+            "2" => t => t.DueDate < DateTime.Today, // Overdue
+            "3" => t => t.Completed, // Completed
+            "4" => t => !t.Completed, // Not completed
+            "5" => t => t.HighPriority, // High priority
+            _ => t => true // Default to all if invalid input
+        };
+
+        var userLines = File.ReadAllLines(Utils.allUsersPathAndFile);
+        foreach (var userLine in userLines)
+        {
+            string[] userData = userLine.Split(';');
+            if (userData.Length >= 1)
+            {
+                string userName = userData[0];
+                User user = new User { Name = userName };
+                user.Tasks = user.GetTasksOfUser();
+
+                var filteredTasks = user.Tasks.FindAll(t => filterPredicate(t));
+
+                Console.WriteLine($"User: {userName} - List of tasks: ");
+                if (filteredTasks.Count == 0)
+                {
+                    Console.WriteLine("  No matching tasks found.");
+                }
+                else
+                {
+                    foreach (var task in filteredTasks)
+                    {
+                        //Console.WriteLine($"  - {task.Description} (Due: {task.DueDate:dd.MM.yyyy}, Priority: {(task.HighPriority ? "High" : "Normal")}, Completed: {(task.Completed ? "Yes" : "No")})");
+                        
+                        Console.Write("  - ");
+                        task.ListTaskInConsole();
+                        System.Console.WriteLine();
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
+        Utils.WaitForEnter();
+    }
 
 }

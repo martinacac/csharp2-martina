@@ -79,7 +79,10 @@ public class User : GeneralUser
         } while (!validIndex);
 
         //Confirm task to mark as completed
-        System.Console.Write($"Mark as completed task: {(index + 1).ToString().PadRight(3, ' ')} - {Tasks[index].Description.PadRight(20, ' ')} Due: {Tasks[index].DueDate:dd.MM.yyyy}, High Priority: {(Tasks[index].HighPriority ? "Yes" : "No")} ? (y/n): ");
+        System.Console.Write($"Mark as completed task: {(index + 1).ToString().PadRight(3, ' ')} - ");
+        Tasks[index].ListTaskInConsole();
+        System.Console.Write(" ? (y/n): ");
+
         //Mark task and save
         if (Console.ReadLine().ToLower() == "y")
             if (index >= 0 && index < Tasks.Count)
@@ -204,7 +207,9 @@ public class User : GeneralUser
             GetTasksOfUser();
             foreach (Task t in Tasks)
             {
-                System.Console.WriteLine($"Task number: {index++.ToString().PadRight(3, ' ')} - {t.Description.PadRight(20, ' ')} High priority: {(t.HighPriority ? "Yes" : "No")}, Due: {t.DueDate.ToString("dd.MM.yyyy")}, Completed: {(t.Completed ? "Yes" : "No")}");
+                Console.Write($"Task number: {index++.ToString().PadRight(3, ' ')} - ");
+                t.ListTaskInConsole();
+                System.Console.WriteLine();
             }
         }
         Utils.WaitForEnter();
@@ -224,9 +229,12 @@ public class User : GeneralUser
         else
         {
             int index = 0;
+            System.Console.WriteLine("Found tasks: ");
             foreach (var t in foundTasks)
             {
-                Console.WriteLine($"Task number: {index++.ToString().PadRight(3, ' ')} - {t.Description.PadRight(20, ' ')} High priority: {(t.HighPriority ? "Yes" : "No")}, Due: {t.DueDate.ToString("dd.MM.yyyy")}, Completed: {(t.Completed ? "Yes" : "No")}");
+                Console.Write($" {index++.ToString().PadRight(3, ' ')} - ");
+                t.ListTaskInConsole();
+                System.Console.WriteLine();
             }
         }
         Utils.WaitForEnter();
