@@ -145,7 +145,7 @@ public class Utils
             repeatInput = false;
             Console.Write("Input new user name: ");
             name = Console.ReadLine();
-            if (!hasRequiredMinLength(name, minLength))
+            if (!HasRequiredMinLength(name, minLength))
             {
                 System.Console.WriteLine($"User name must have at least {minLength} characters. Try again.");
                 repeatInput = true;
@@ -175,7 +175,7 @@ public class Utils
             repeatInput = false;
             Console.Write($"Input password (min {minLength} characters): ");
             password = Console.ReadLine();
-            if (!hasRequiredMinLength(password, minLength))
+            if (!HasRequiredMinLength(password, minLength))
             {
                 System.Console.WriteLine($"Password must have at least {minLength} characters. Try again.");
                 repeatInput = true;
@@ -223,7 +223,7 @@ public class Utils
             repeatInput = false;
             Console.Write("Input new manager name: ");
             name = Console.ReadLine();
-            if (!hasRequiredMinLength(name, minLength))
+            if (!HasRequiredMinLength(name, minLength))
             {
                 System.Console.WriteLine($"User name must have at least {minLength} characters. Try again.");
                 repeatInput = true;
@@ -253,7 +253,7 @@ public class Utils
             repeatInput = false;
             Console.Write($"Input password (min {minLength} characters): ");
             password = Console.ReadLine();
-            if (!hasRequiredMinLength(password, minLength))
+            if (!HasRequiredMinLength(password, minLength))
             {
                 System.Console.WriteLine($"Password must have at least {minLength} characters. Try again.");
                 repeatInput = true;
@@ -285,12 +285,12 @@ public class Utils
             System.Console.WriteLine($"Warning: Sign up of manager {name} failed.");
         }
     }
-    public static bool hasRequiredMinLength(string text, int minLength)
+    public static bool HasRequiredMinLength(string text, int minLength)
     {
         if (text.Length >= minLength) return true;
         else return false;
     }
-    public static bool ExistsDirectory()
+    public static bool ExistsTaskTrackerDirectory()
     {
         if (Directory.Exists(appRootDirectoryPath)) return true;
         return false;

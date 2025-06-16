@@ -8,7 +8,7 @@ class Program
     {
         User? loggedUser = null;
         Manager? loggedManager = null;
-        if (!Utils.ExistsDirectory()) Directory.CreateDirectory(Utils.appRootDirectoryPath);
+        if (!Utils.ExistsTaskTrackerDirectory()) Directory.CreateDirectory(Utils.appRootDirectoryPath);
         if (!Utils.ExistsAllUsersFile()) File.Create(Utils.allUsersPathAndFile).Close();
         if (!Utils.ExistsAllManagersFile())
         {
