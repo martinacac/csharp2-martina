@@ -18,9 +18,10 @@ public class Manager : GeneralUser
         do
         {
             Console.Clear();
-            Console.WriteLine("---------------------------");
+            string hyphens = new string('-', 30 + Name.Length);
+            Console.WriteLine(hyphens);
             Console.WriteLine($"TASK TRACKER - Manager Menu - {Name}");
-            Console.WriteLine("---------------------------");
+            Console.WriteLine(hyphens);
             Console.WriteLine("1) List Tasks of Selected User");
             Console.WriteLine("2) List Tasks of All Users");
             Console.WriteLine("3) Find Tasks");
@@ -28,7 +29,7 @@ public class Manager : GeneralUser
             Console.WriteLine("5) Delete Task");
             Console.WriteLine("6) Sign up New Manager");
             Console.WriteLine("0) Return to Main Menu");
-            Console.WriteLine("---------------------------");
+            Console.WriteLine(hyphens);
             Console.Write("Your choice (0-5): ");
             string choice = Console.ReadLine();
 
@@ -180,7 +181,7 @@ public class Manager : GeneralUser
         }
         if (dueDate < DateTime.Today)
         {
-            System.Console.WriteLine("Your due date is in the past. Do you want to continue? (y/n): ");
+            System.Console.Write("Your due date is in the past. Do you want to continue? (y/n): ");
             if (Console.ReadLine() == "n") return;
         }
 
@@ -188,7 +189,9 @@ public class Manager : GeneralUser
         bool highPriority = Console.ReadLine().ToLower() == "y";
         //Get confirmation
         Task newTask = new Task(description, dueDate, highPriority);
-        System.Console.Write($"Add task: {newTask} ? (y/n): "); //.Description.PadRight(20, ' ')} Due: {newTask.DueDate:dd.MM.yyyy}, High Priority: {(newTask.HighPriority ? "Yes" : "No")
+        System.Console.Write($"Add task: ");
+        newTask.WriteTaskInConsole();
+        System.Console.Write(" ? (y/n): ");
         //Create and add the new task, save the task
         if (Console.ReadLine().ToLower() == "y")
         {
@@ -224,7 +227,8 @@ public class Manager : GeneralUser
         for (int i = 0; i < userTasks.Count; i++)
         {
             System.Console.Write($"Task number: {(i + 1).ToString().PadRight(3, ' ')} - ");
-            System.Console.WriteLine(userTasks[i]);
+            userTasks[i].WriteTaskInConsole();
+            System.Console.WriteLine();
             //{userTasks[i].Description.PadRight(20, '.')} Due: {userTasks[i].DueDate:dd.MM.yyyy}, High priority:{(userTasks[i].HighPriority ? "Yes" : "No")} Completed: {(userTasks[i].Completed ? "Yes" : "No")}");
         }
         //Select task to delete
@@ -232,7 +236,7 @@ public class Manager : GeneralUser
         int index;
         do
         {
-            System.Console.WriteLine("Input number of task to delete: ");
+            System.Console.Write("Input number of task to delete: ");
             validIndex = int.TryParse(Console.ReadLine(), out index);
             if (!validIndex || index < 1 || index > userTasks.Count)
             {
@@ -247,7 +251,8 @@ public class Manager : GeneralUser
         } while (!validIndex);
         //Confirm task to delete
         System.Console.Write($"Delete task {(index + 1).ToString().PadRight(3, ' ')} - ");
-        System.Console.WriteLine(userTasks[index]);
+        userTasks[index].WriteTaskInConsole();
+        System.Console.Write(" ? (y/n): ");
         //{ userTasks[index].Description.PadRight(20, '.')} Due: {userTasks[index].DueDate:dd.MM.yyyy}, Priority:{(userTasks[index].HighPriority ? "Yes" : "No")}? (y/n)");
         //Delete task and save
         if (Console.ReadLine().ToLower() == "y")
@@ -255,7 +260,6 @@ public class Manager : GeneralUser
             userTasks.RemoveAt(index);
             selectedUser.SaveTasks(userTasks);
             System.Console.WriteLine($"Task successfully deleted.");
-            Utils.WaitForEnter();
         }
         else System.Console.WriteLine("No task deleted.");
         Utils.WaitForEnter();
@@ -270,15 +274,7 @@ public class Manager : GeneralUser
         }
 
         string filterChoice = Utils.PromptTaskFilterType();
-        Func<Task, bool> filterPredicate = filterChoice switch
-        {
-            "1" => t => true, // All tasks
-            "2" => t => t.DueDate < DateTime.Today, // Overdue
-            "3" => t => t.Completed, // Completed
-            "4" => t => !t.Completed, // Not completed
-            "5" => t => t.HighPriority, // High priority
-            _ => t => true // Default to all if invalid input
-        };
+        Func<Task, bool> filterPredicate = Utils.GetTaskFilterPredicate(filterChoice);
 
         var userLines = File.ReadAllLines(Utils.allUsersPathAndFile);
         foreach (var userLine in userLines)
@@ -302,9 +298,9 @@ public class Manager : GeneralUser
                     foreach (var task in filteredTasks)
                     {
                         //Console.WriteLine($"  - {task.Description} (Due: {task.DueDate:dd.MM.yyyy}, Priority: {(task.HighPriority ? "High" : "Normal")}, Completed: {(task.Completed ? "Yes" : "No")})");
-                        
+
                         Console.Write("  - ");
-                        task.ListTaskInConsole();
+                        task.WriteTaskInConsole();
                         System.Console.WriteLine();
                     }
                 }

@@ -17,7 +17,7 @@ public class Utils
     public static string allUsersPathAndFile = Path.Combine(appRootDirectoryPath, allUsersFile);
     public static string allManagersPathAndFile = Path.Combine(appRootDirectoryPath, allManagersFile);
     public static char[] invalidFileNameChar = Path.GetInvalidFileNameChars();
-    public static string[] supportedDateFormats = { "dd.MM.yyyy", "dd/MM/yyyy", "dd-MM-yyyy", "d.M.yyyy", "d/M/yyyy", "d-M-yyyy" };
+    public static string[] supportedDateFormats = { "dd.MM.yyyy", "dd/MM/yyyy", "dd-MM-yyyy", "d. M. yyyy", "d/M/yyyy", "d-M-yyyy" };
 
     public static string EncodePassword(string password)
     {
@@ -27,6 +27,33 @@ public class Utils
     public static string DecodePassword(string codedPassword)
     {
         return Encoding.UTF8.GetString(Convert.FromBase64String(codedPassword));
+    }
+    public static string ReadPassword()
+    {
+        string password = "";
+        ConsoleKeyInfo key;
+
+        do
+        {
+            key = Console.ReadKey(true);
+
+            // Backspace should remove the last character
+            if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+            {
+                password = password.Substring(0, password.Length - 1);
+                Console.Write("\b \b");
+            }
+            // Ignore control keys except backspace (already handled)
+            else if (!char.IsControl(key.KeyChar))
+            {
+                password += key.KeyChar;
+                Console.Write("*");
+            }
+        }
+        while (key.Key != ConsoleKey.Enter);
+
+        Console.WriteLine();
+        return password;
     }
     public static User? LogInUser()
     {
@@ -42,7 +69,7 @@ public class Utils
         string name = Console.ReadLine();
 
         Console.Write("Input password: ");
-        string password = Console.ReadLine();
+        string password = ReadPassword();
         string codedPassword = EncodePassword(password);
 
         foreach (var row in File.ReadAllLines(allUsersPathAndFile))
@@ -77,7 +104,7 @@ public class Utils
         do
         {
             Console.Write("Input password: ");
-            password = Console.ReadLine();
+            password = ReadPassword();
             codedPassword = EncodePassword(password);
         } while (string.IsNullOrEmpty(password));
         if (!File.Exists(allManagersPathAndFile) || !Directory.Exists(appRootDirectoryPath))
@@ -232,7 +259,7 @@ public class Utils
                 repeatInput = true;
                 continue;
             }
-            Console.Write($"Input password for verification): ");
+            Console.Write($"Input password for verification: ");
             string password2 = Console.ReadLine();
             if (password != password2)
             {
@@ -320,5 +347,17 @@ public class Utils
         Console.WriteLine("5) High priority tasks");
         Console.Write("Your choice (1-5): ");
         return Console.ReadLine();
+    }
+    public static Func<Task, bool> GetTaskFilterPredicate(string filterChoice)
+    {
+        return filterChoice switch
+        {
+            "1" => t => true, // All tasks
+            "2" => t => t.DueDate < DateTime.Today, // Overdue
+            "3" => t => t.Completed, // Completed
+            "4" => t => !t.Completed, // Not completed
+            "5" => t => t.HighPriority, // High priority
+            _ => t => true // Default to all if invalid input
+        };
     }
 }

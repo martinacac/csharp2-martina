@@ -27,7 +27,7 @@ public class Task
         return $"{openOrCompleted} {Description.PadRight(20, ' ')} | Priority: {priority} | Deadline: {DueDate:dd.MM.yyyy} {overdue}";
     }
 
-    public virtual void ListTaskInConsole()
+    public virtual void WriteTaskInConsole()
     {
         var originalColor = Console.ForegroundColor;
 
