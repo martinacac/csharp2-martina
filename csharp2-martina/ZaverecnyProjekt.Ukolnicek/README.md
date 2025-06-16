@@ -49,7 +49,7 @@ supporting methods: ListUsers, GetSelectedUser
 3. SignUpUser
 4. SignUpManager
 
-supporting methods: EncodePassword, DecodePassword, ReadPassword, HasRequiredMinLength, ExistsTaskTrackerDirectory, ExistsAllUsersFile, ExistsAllManagersFile, ExistsUserNameFile, ExistsUserName, ExistsManagerName, WaitForEnter, PromptTaskFilterType, GetTaskFilterPredic
+supporting methods: EncodePassword, DecodePassword, ReadPassword, HasRequiredMinLength, ExistsTaskTrackerDirectory, ExistsAllUsersFile, ExistsAllManagersFile, ExistsUserNameFile, ExistsUserName, ExistsManagerName, WaitForEnter, PromptTaskFilterType, GetTaskFilterPredicate
 
 ### public class Program
 
