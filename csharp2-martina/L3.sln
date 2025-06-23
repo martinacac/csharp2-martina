@@ -49,6 +49,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "L9.XMLSoubory.BR2.Serializa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testovaci", "testovaci\testovaci.csproj", "{917520FA-46AA-4C04-9FCC-EDDBD1E6D5B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "L11.StaticFields", "L11.StaticFields\L11.StaticFields.csproj", "{5C594EBF-7C47-46C4-B5DE-626A65EFB221}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "L11.InterfaceExamples", "L11.InterfaceExamples\L11.InterfaceExamples.csproj", "{5F08238D-9851-41FA-AB64-BBDBD93B2E7B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -147,6 +151,14 @@ Global
 		{917520FA-46AA-4C04-9FCC-EDDBD1E6D5B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{917520FA-46AA-4C04-9FCC-EDDBD1E6D5B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{917520FA-46AA-4C04-9FCC-EDDBD1E6D5B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C594EBF-7C47-46C4-B5DE-626A65EFB221}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C594EBF-7C47-46C4-B5DE-626A65EFB221}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C594EBF-7C47-46C4-B5DE-626A65EFB221}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C594EBF-7C47-46C4-B5DE-626A65EFB221}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F08238D-9851-41FA-AB64-BBDBD93B2E7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F08238D-9851-41FA-AB64-BBDBD93B2E7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F08238D-9851-41FA-AB64-BBDBD93B2E7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F08238D-9851-41FA-AB64-BBDBD93B2E7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
