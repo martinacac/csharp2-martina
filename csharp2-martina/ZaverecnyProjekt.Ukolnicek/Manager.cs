@@ -96,7 +96,7 @@ public class Manager : GeneralUser
     }
     public void ListUsers()
     {
-        if (!File.Exists(Utils.allUsersPathAndFile) || !Directory.Exists(Utils.appRootDirectoryPath))
+        if (!File.Exists(Utils.allUsersPathAndFile) || !Directory.Exists(Utils.appRootDirectoryPath) || File.ReadAllLines(Utils.allUsersPathAndFile).Length == 0)
         {
             Console.WriteLine("No registered users found.");
             Utils.WaitForEnter();
@@ -113,7 +113,7 @@ public class Manager : GeneralUser
     }
     public User? GetSelectedUser()
     {
-        if (!File.Exists(Utils.allUsersPathAndFile) || !Directory.Exists(Utils.appRootDirectoryPath))
+        if (!File.Exists(Utils.allUsersPathAndFile) || !Directory.Exists(Utils.appRootDirectoryPath) || File.ReadAllLines(Utils.allUsersPathAndFile).Length == 0)
         {
             Console.WriteLine("No registered users found.");
             Utils.WaitForEnter();
@@ -153,54 +153,59 @@ public class Manager : GeneralUser
         ListUsers();
         System.Console.WriteLine();
         //Select a user by index
-        User selectedUser = GetSelectedUser();
-        if (selectedUser == null)
+        if (File.ReadAllLines(Utils.allUsersPathAndFile).Length == 0) return;
+        else
         {
-            System.Console.WriteLine("No user selected.");
-            Utils.WaitForEnter();
-            return;
-        }
-        //Get task properties
-        string description;
-        do
-        {
-            System.Console.Write("Enter task description: ");
-            description = Console.ReadLine();
-            if (string.IsNullOrEmpty(description))
+            User selectedUser = GetSelectedUser();
+            if (selectedUser == null)
             {
-                System.Console.WriteLine("Description cannot be empty.");
+                System.Console.WriteLine("No user selected.");
+                Utils.WaitForEnter();
+                return;
             }
-        } while (string.IsNullOrEmpty(description));
+            //Get task properties
+            string description;
+            do
+            {
+                System.Console.Write("Enter task description: ");
+                description = Console.ReadLine();
+                if (string.IsNullOrEmpty(description))
+                {
+                    System.Console.WriteLine("Description cannot be empty.");
+                }
+            } while (string.IsNullOrEmpty(description));
 
-        DateTime dueDate;
-        System.Console.Write("Enter due date (dd.MM.yyyy): ");
-        while (!DateTime.TryParseExact(Console.ReadLine(), Utils.supportedDateFormats, null, System.Globalization.DateTimeStyles.None, out dueDate))
-        {
-            System.Console.WriteLine("Invalid date format. Please use dd.MM.yyyy or dd/MM/yyyy: ");
+            DateTime dueDate;
             System.Console.Write("Enter due date (dd.MM.yyyy): ");
-        }
-        if (dueDate < DateTime.Today)
-        {
-            System.Console.Write("Your due date is in the past. Do you want to continue? (y/n): ");
-            if (Console.ReadLine() == "n") return;
+            while (!DateTime.TryParseExact(Console.ReadLine(), Utils.supportedDateFormats, null, System.Globalization.DateTimeStyles.None, out dueDate))
+            {
+                System.Console.WriteLine("Invalid date format. Please use dd.MM.yyyy or dd/MM/yyyy: ");
+                System.Console.Write("Enter due date (dd.MM.yyyy): ");
+            }
+            if (dueDate < DateTime.Today)
+            {
+                System.Console.Write("Your due date is in the past. Do you want to continue? (y/n): ");
+                if (Console.ReadLine() == "n") return;
+            }
+
+            System.Console.Write("Is this a high priority task? (y/n): ");
+            bool highPriority = Console.ReadLine().ToLower() == "y";
+            //Get confirmation
+            Task newTask = new Task(description, dueDate, highPriority);
+            System.Console.Write($"Add task: ");
+            newTask.WriteTaskInConsole();
+            System.Console.Write(" ? (y/n): ");
+            //Create and add the new task, save the task
+            if (Console.ReadLine().ToLower() == "y")
+            {
+                List<Task> userTasks = selectedUser.GetTasksOfUser() ?? new List<Task>();
+                userTasks.Add(newTask);
+                selectedUser.SaveTasks(userTasks);
+                System.Console.WriteLine("Task added successfully.");
+                Utils.WaitForEnter();
+            }
         }
 
-        System.Console.Write("Is this a high priority task? (y/n): ");
-        bool highPriority = Console.ReadLine().ToLower() == "y";
-        //Get confirmation
-        Task newTask = new Task(description, dueDate, highPriority);
-        System.Console.Write($"Add task: ");
-        newTask.WriteTaskInConsole();
-        System.Console.Write(" ? (y/n): ");
-        //Create and add the new task, save the task
-        if (Console.ReadLine().ToLower() == "y")
-        {
-            List<Task> userTasks = selectedUser.GetTasksOfUser() ?? new List<Task>();
-            userTasks.Add(newTask);
-            selectedUser.SaveTasks(userTasks);
-            System.Console.WriteLine("Task added successfully.");
-            Utils.WaitForEnter();
-        }
     }
     public void DeleteTask()
     {
@@ -208,6 +213,7 @@ public class Manager : GeneralUser
         ListUsers();
         System.Console.WriteLine();
         //Select user by index
+        if (File.ReadAllLines(Utils.allUsersPathAndFile).Length == 0) return;
         User selectedUser = GetSelectedUser();
         if (selectedUser == null)
         {

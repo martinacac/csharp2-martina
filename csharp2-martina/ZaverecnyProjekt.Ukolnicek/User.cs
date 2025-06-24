@@ -69,36 +69,38 @@ public class User : GeneralUser
     public void MarkTaskAsCompleted()
     {
         ListTasks();
-        bool validIndex = false;
-        int index;
-        do
+        if (Tasks.Count > 0)
         {
-            Console.Write("Input number of task to be marked as completed: ");
-            validIndex = int.TryParse(Console.ReadLine(), out index);
-            if (!validIndex) Console.WriteLine("Invalid number. Try again.");
-            else index--;
-        } while (!validIndex);
-
-        //Confirm task to mark as completed
-        System.Console.Write($"Mark as completed task: {(index + 1).ToString().PadRight(3, ' ')} - ");
-        Tasks[index].WriteTaskInConsole();
-        System.Console.Write(" ? (y/n): ");
-
-        //Mark task and save
-        if (Console.ReadLine().ToLower() == "y")
-            if (index >= 0 && index < Tasks.Count)
+            bool validIndex = false;
+            int index;
+            do
             {
-                Tasks[index].Completed = true;
-                SaveTasks(Tasks);
-                Console.WriteLine("Task marked as completed.");
-            }
-            else
-            {
-                Console.WriteLine("Invalid number.");
-            }
-        Utils.WaitForEnter();
+                Console.Write("Input number of task to be marked as completed: ");
+                validIndex = int.TryParse(Console.ReadLine(), out index);
+                if (!validIndex) Console.WriteLine("Invalid number. Try again.");
+                else index--;
+            } while (!validIndex);
+
+            //Confirm task to mark as completed
+            System.Console.Write($"Mark as completed task: {(index + 1).ToString().PadRight(3, ' ')} - ");
+            Tasks[index].WriteTaskInConsole();
+            System.Console.Write(" ? (y/n): ");
+
+            //Mark task and save
+            if (Console.ReadLine().ToLower() == "y")
+                if (index >= 0 && index < Tasks.Count)
+                {
+                    Tasks[index].Completed = true;
+                    SaveTasks(Tasks);
+                    Console.WriteLine("Task marked as completed.");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid number.");
+                }
+            Utils.WaitForEnter();
+        }
     }
-
     public void SaveTasks(List<Task> tasks)
     {
         if (tasks != null)
@@ -201,7 +203,6 @@ public class User : GeneralUser
         if (Tasks.Count == 0)
         {
             System.Console.WriteLine("No tasks found.");
-            Utils.WaitForEnter();
         }
         else
         {
